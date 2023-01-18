@@ -1,26 +1,74 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
-import * as vscode from 'vscode';
+import * as vscode from "vscode";
+import * as svelte from "svelte/compiler";
+import { BaseNode } from "estree-walker";
 
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
+  const source = `<script>
+import { count } from './stores.js';
+  export const hello = 'Hello world';
+$: bye = $count;
+</script>
+{@html someHTML}
+<div transition:fade>
+  <input on:input={(e) => console.log(e)}/>
+</div>
+<slot></slot>
+<style>
+  div.oy {
+    color: red;
+    padding: 0 10px 10 0;
+  }
+  div#a:hover {
+    color: blue;
+  }
+</style>
+`;
+  let root: TreeItem | undefined;
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "svelte-companion" is now active!');
+  const ast = svelte.parse(source, { filename: "App.svelte" });
+  svelte.walk(ast.html, {
+    enter(node: TreeItem, parent: TreeItem, key: string, index: number) {
+      // do_something(node);
+      // if (should_skip_children(node)) {
+      // 	this.skip();
+      // }
+      // console.log(padding + node.type + " " + index);
+      const treeItem: TreeItem = {
+        type: node.type,
+        children: node.children,
+        label: node.type,
+        collapsibleState: node.children ? vscode.TreeItemCollapsibleState.Expanded : vscode.TreeItemCollapsibleState.None,
+      };
+      if (root === undefined) {
+        root = treeItem;
+      }
+      
+    },
+    leave(node: any, parent: any, prop: any, index: any) {
+      // do_something_else(node);
+    },
+  });
+  console.log(root);
+  
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('svelte-companion.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from Svelte companion!');
-	});
+  let disposable = vscode.commands.registerCommand(
+    "svelte-companion.helloWorld",
+    () => {
+      vscode.window.showInformationMessage(
+        "Hello World from Svelte companion!"
+      );
+    }
+  );
 
-	context.subscriptions.push(disposable);
+  context.subscriptions.push(disposable);
 }
 
 // This method is called when your extension is deactivated
 export function deactivate() {}
+
+interface TreeItem extends vscode.TreeItem, BaseNode {
+  children?: TreeItem[];
+}
+
+interface Input {}
+interface Output {}
