@@ -1,7 +1,7 @@
-import * as vscode from 'vscode';
-import TreeItem from './TreeItem';
+import * as vscode from "vscode";
+import TreeItem from "./TreeItem";
 import * as svelte from "svelte/compiler";
-import HTMLNode from './HtmlNode';
+import HTMLNode from "./HtmlNode";
 
 const source = `<script>
 import { count } from './stores.js';
@@ -30,35 +30,29 @@ class TreeDataProvider implements vscode.TreeDataProvider<TreeItem> {
   data: TreeItem[] = [];
 
   constructor() {
-    let root: TreeItem | undefined;
+    const classContext = this;
 
     const ast = svelte.parse(source, { filename: "App.svelte" });
     svelte.walk(ast.html, {
-      enter(node: HTMLNode, parent: HTMLNode, key: string, index: number) {
+      enter(node: TreeItem, parent: TreeItem, key: string, index: number) {
         // do_something(node);
         // if (should_skip_children(node)) {
         // 	this.skip();
         // }
-        const treeItem: TreeItem = {
-          children: node.children,
-          label: node.type,
-          collapsibleState: node.children
-            ? vscode.TreeItemCollapsibleState.Expanded
-            : vscode.TreeItemCollapsibleState.None,
-        };
+        node.label = node.type;
+        node.collapsibleState = node.children && node.children.length > 0
+          ? vscode.TreeItemCollapsibleState.Expanded
+          : vscode.TreeItemCollapsibleState.None;
 
-        if (root === undefined) {
-          root = treeItem;
+        if (classContext.data.length === 0) {
+          classContext.data.push(node);
         }
-        // if (data.length === 0) {
-        //   data.push(treeItem);
-        // }
+        
       },
       leave(node: HTMLNode, parent: HTMLNode, key: string, index: number) {
         // do_something_else(node);
       },
     });
-    console.log(root);
   }
 
   getTreeItem(element: TreeItem): vscode.TreeItem | Thenable<vscode.TreeItem> {
