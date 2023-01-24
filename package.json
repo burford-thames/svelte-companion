@@ -19,7 +19,15 @@
         "command": "svelte-companion.helloWorld",
         "title": "Hello World"
       }
-    ]
+    ],
+    "views": {
+      "explorer": [
+        {
+          "id": "svelteLayout",
+          "name": "Svelte companion"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
