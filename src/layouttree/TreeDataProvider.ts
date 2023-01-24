@@ -1,7 +1,6 @@
 import * as vscode from "vscode";
 import TreeItem from "./TreeItem";
 import * as svelte from "svelte/compiler";
-import HTMLNode from "./HtmlNode";
 
 const source = `<script>
 import { count } from './stores.js';
@@ -49,7 +48,7 @@ class TreeDataProvider implements vscode.TreeDataProvider<TreeItem> {
         }
         
       },
-      leave(node: HTMLNode, parent: HTMLNode, key: string, index: number) {
+      leave(node: TreeItem, parent: TreeItem, key: string, index: number) {
         // do_something_else(node);
       },
     });
