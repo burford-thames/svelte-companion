@@ -18,6 +18,10 @@
       {
         "command": "svelte-companion.helloWorld",
         "title": "Hello World"
+      },
+      {
+        "command": "svelte-companion.refreshLayoutTree",
+        "title": "Refresh layout tree"
       }
     ],
     "views": {
