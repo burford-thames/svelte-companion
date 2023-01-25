@@ -11,11 +11,16 @@ export function parseCurrentFile(): TreeItem[] {
   if (!editor) return [];
   const source = editor.document.getText();
 
-  const ast = svelte.parse(source, { filename: editor.document.fileName });
-  // if (ast.module) data.push(parseScript(ast.module));
-  if (ast.instance) data.push(parseScript(ast.instance));
-  data.push(parseHtml(ast.html));
-  if (ast.css) data.push(parseStyle(ast.css));
+  try {
+    // Parse the svelte file
+    const ast = svelte.parse(source, { filename: editor.document.fileName });
+    // if (ast.module) data.push(parseScript(ast.module));
+    if (ast.instance) data.push(parseScript(ast.instance));
+    data.push(parseHtml(ast.html));
+    if (ast.css) data.push(parseStyle(ast.css));
+  } catch (error) {
+    console.log("Parse error.");
+  }
 
   return data;
 }

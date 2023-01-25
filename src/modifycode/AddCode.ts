@@ -1,9 +1,10 @@
 import * as vscode from "vscode";
 
-export function addCode() {
+export function addCode(start: number, end: number) {
   let editor = vscode.window.activeTextEditor;
-  let position = editor?.selection.active;
+  let lineAndColumn = editor?.document.positionAt(start);
+
   editor?.edit((editBuilder) => {
-    editBuilder.insert(position || new vscode.Position(0, 0), "Hello World!");
+    editBuilder.insert(lineAndColumn || new vscode.Position(0, 0), "Hello World!");
   });
 }
