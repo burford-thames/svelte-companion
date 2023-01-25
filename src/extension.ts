@@ -1,7 +1,17 @@
 import * as vscode from "vscode";
 import TreeDataProvider from "./layouttree/TreeDataProvider";
+import { addCode } from "./modifycode/AddCode";
 
 export function activate(context: vscode.ExtensionContext) {
+  // Register command that will be called when the user clicks on the tree item
+  let addCodeCommand = vscode.commands.registerCommand("svelte-companion.addCode", (item) => {
+    vscode.window.showInformationMessage(`Opening ${item.label}`);
+    
+    // Insert the text at the current cursor position
+    addCode();
+  });
+
+  // Register the tree data provider
   let tree = new TreeDataProvider();
   let layoutTree = vscode.window.registerTreeDataProvider("svelteLayout", tree);
 
@@ -21,6 +31,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   context.subscriptions.push(layoutTree);
   context.subscriptions.push(refreshCommand);
+  context.subscriptions.push(addCodeCommand);
 }
 
 // This method is called when your extension is deactivated

@@ -16,19 +16,34 @@
   "contributes": {
     "commands": [
       {
-        "command": "svelte-companion.helloWorld",
-        "title": "Hello World"
-      },
-      {
         "command": "svelte-companion.refreshLayoutTree",
         "title": "Refresh layout tree"
+      },
+      {
+        "command": "svelte-companion.addCode",
+        "title": "Add code",
+        "icon": "$(add)"
       }
     ],
     "views": {
       "explorer": [
         {
           "id": "svelteLayout",
-          "name": "Svelte companion"
+          "name": "Svelte companion",
+          "when": "resourceExtname == .svelte"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        
+      ],
+      "view/item/context": [
+        {
+          "command": "svelte-companion.addCode",
+          "when": "view == svelteLayout",
+          "group": "inline",
+          "icon": "bug"
         }
       ]
     }

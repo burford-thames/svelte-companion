@@ -5,7 +5,6 @@ import { Script, Style, TemplateNode } from "svelte/types/compiler/interfaces";
 
 export function parseCurrentFile(): TreeItem[] {
   let data: TreeItem[] = [];
-  let isRoot = false;
 
   // Get the active text editor
   const editor = vscode.window.activeTextEditor;
