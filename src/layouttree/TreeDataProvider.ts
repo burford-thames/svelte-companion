@@ -17,7 +17,10 @@ class TreeDataProvider implements vscode.TreeDataProvider<TreeItem> {
   }
 
   getChildren(element?: TreeItem | undefined): vscode.ProviderResult<TreeItem[]> {
-    return element ? element.children : this.data;
+    const children = element ? element.children : this.data;
+
+    // Filter out empty labels
+    return children?.filter((child) => child.label);
   }
 
   refresh(): void {

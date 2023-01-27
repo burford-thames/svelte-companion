@@ -1,7 +1,7 @@
 import TreeItem from "./TreeItem";
 import * as svelte from "svelte/compiler";
 import * as vscode from "vscode";
-import { Script, Style, TemplateNode } from "svelte/types/compiler/interfaces";
+import { MustacheTag, Script, Style, TemplateNode, Text } from "svelte/types/compiler/interfaces";
 
 export function parseCurrentFile(): TreeItem[] {
   let data: TreeItem[] = [];
@@ -21,7 +21,6 @@ export function parseCurrentFile(): TreeItem[] {
   } catch (error) {
     console.log("Parse error.");
   }
-
   return data;
 }
 
@@ -31,8 +30,21 @@ function parseHtml(html: TemplateNode): TreeItem {
 
   svelte.walk(html, {
     enter(node: TreeItem, parent: TreeItem, key: string, index: number) {
-      node.label = node.type;
       node.collapsibleState = node.children && node.children.length > 0 ? vscode.TreeItemCollapsibleState.Expanded : vscode.TreeItemCollapsibleState.None;
+
+      if (node.type === "Text") {
+        node.label = (node as Text).data.trim();
+      } else if (node.type === "MustacheTag") {
+        const editor = vscode.window.activeTextEditor;
+        const expression = (node as MustacheTag).expression;
+        const start = expression.loc?.start ?? { line: 0, column: 0 };
+        const end = expression.loc?.end ?? { line: 0, column: 0 };
+
+        const text = editor?.document.getText(new vscode.Range(start.line - 1, start.column, end.line - 1, end.column));
+        node.label = node.type + ": " + text;
+      } else {
+        node.label = node.type;
+      }
 
       if (!root) root = node;
     },
