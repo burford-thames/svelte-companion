@@ -6,8 +6,6 @@ import { addCode } from "./modifycode/AddCode";
 export function activate(context: vscode.ExtensionContext) {
   // Register command that will be called when the user clicks on the tree item
   let addCodeCommand = vscode.commands.registerCommand("svelte-companion.addCode", (item: TreeItem) => {
-    vscode.window.showInformationMessage(`Opening ${item.label}`);
-    
     // Insert the text at the current cursor position
     addCode(item.start || 0, item.end || 0);
   });
