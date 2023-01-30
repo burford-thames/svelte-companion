@@ -3,6 +3,7 @@ import * as svelte from "svelte/compiler";
 import * as vscode from "vscode";
 import { MustacheTag, Script, Style, TemplateNode, Text } from "svelte/types/compiler/interfaces";
 
+// This need a rewrite, but it works for now
 export function parseCurrentFile(): TreeItem[] {
   let data: TreeItem[] = [];
 
@@ -55,19 +56,39 @@ function parseHtml(html: TemplateNode): TreeItem {
 }
 
 function parseScript(script: Script): TreeItem {
-  let root: TreeItem | undefined;
-
+  let root: TreeItem;
+  let variables: TreeItem[] = [];
+  
   svelte.walk(script, {
     enter(node: TreeItem, parent: TreeItem, key: string, index: number) {
-      node.label = node.type;
-      node.collapsibleState = node.children && node.children.length > 0 ? vscode.TreeItemCollapsibleState.Expanded : vscode.TreeItemCollapsibleState.None;
-
-      if (!root) root = node;
+      // node.label = node.type;
+      // node.collapsibleState = node.children && node.children.length > 0 ? vscode.TreeItemCollapsibleState.Expanded : vscode.TreeItemCollapsibleState.None;
+      if (node.type === "VariableDeclarator") {
+        variables.push({
+          type: "Variable",
+          label: (node.id as any).name,
+          collapsibleState: vscode.TreeItemCollapsibleState.None,
+        });
+      }
     },
     leave(node: TreeItem, parent: TreeItem, key: string, index: number) {},
   });
 
-  return root!;
+  root = {
+    type: "Script",
+    label: "Script",
+    children: [
+      {
+        type: "Variables",
+        label: "Variables",
+        children: variables,
+        collapsibleState: variables.length > 0 ? vscode.TreeItemCollapsibleState.Expanded : vscode.TreeItemCollapsibleState.None,
+      },
+    ],
+    collapsibleState: vscode.TreeItemCollapsibleState.Expanded,
+  };
+
+  return root;
 }
 
 function parseStyle(style: Style): TreeItem {
