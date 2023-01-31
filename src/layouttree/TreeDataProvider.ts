@@ -13,6 +13,12 @@ class TreeDataProvider implements vscode.TreeDataProvider<TreeItem> {
   }
 
   getTreeItem(element: TreeItem): vscode.TreeItem | Thenable<vscode.TreeItem> {
+    element.description = '1';
+    element.command = {
+      command: "svelte-companion.addCode",
+      title: "Add Code",
+      arguments: [element]
+    };
     return element;
   }
 

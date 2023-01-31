@@ -1,7 +1,7 @@
 import TreeItem from "./TreeItem";
 import * as svelte from "svelte/compiler";
 import * as vscode from "vscode";
-import { MustacheTag, Script, Style, TemplateNode, Text } from "svelte/types/compiler/interfaces";
+import { Element, MustacheTag, Script, Style, TemplateNode, Text } from "svelte/types/compiler/interfaces";
 
 // This need a rewrite, but it works for now
 export function parseCurrentFile(): TreeItem[] {
@@ -33,18 +33,38 @@ function parseHtml(html: TemplateNode): TreeItem {
     enter(node: TreeItem, parent: TreeItem, key: string, index: number) {
       node.collapsibleState = node.children && node.children.length > 0 ? vscode.TreeItemCollapsibleState.Expanded : vscode.TreeItemCollapsibleState.None;
 
-      if (node.type === "Text") {
-        node.label = (node as Text).data.trim();
-      } else if (node.type === "MustacheTag") {
-        const editor = vscode.window.activeTextEditor;
-        const expression = (node as MustacheTag).expression;
-        const start = expression.loc?.start ?? { line: 0, column: 0 };
-        const end = expression.loc?.end ?? { line: 0, column: 0 };
+      switch (node.type) {
+        case "Fragment":
+          node.label = "Fragment";
+          node.iconPath = new vscode.ThemeIcon("symbol-array");
+          break;
+        case "EachBlock":
+          node.label = "#Each";
+          node.iconPath = new vscode.ThemeIcon("repo-sync");
+          break;
+        case "Element":
+          node.label = (node as Element).name;
+          node.iconPath = new vscode.ThemeIcon("symbol-class");
+          break;
+        case "Text":
+          node.label = (node as Text).data.trim();
+          node.iconPath = new vscode.ThemeIcon("symbol-string");
+          break;
+        case "MustacheTag":
+          const editor = vscode.window.activeTextEditor;
+          const expression = (node as MustacheTag).expression;
+          const start = expression.loc?.start ?? { line: 0, column: 0 };
+          const end = expression.loc?.end ?? { line: 0, column: 0 };
+  
+          const text = editor?.document.getText(new vscode.Range(start.line - 1, start.column, end.line - 1, end.column));
+          node.label = text;
+          node.iconPath = new vscode.ThemeIcon("symbol-variable");
+          break;
 
-        const text = editor?.document.getText(new vscode.Range(start.line - 1, start.column, end.line - 1, end.column));
-        node.label = node.type + ": " + text;
-      } else {
-        node.label = node.type;
+        default:
+          node.label = node.type;
+          node.iconPath = new vscode.ThemeIcon("folder");
+          break;
       }
 
       if (!root) root = node;
@@ -58,7 +78,8 @@ function parseHtml(html: TemplateNode): TreeItem {
 function parseScript(script: Script): TreeItem {
   let root: TreeItem;
   let variables: TreeItem[] = [];
-  
+  let functions: TreeItem[] = [];
+
   svelte.walk(script, {
     enter(node: TreeItem, parent: TreeItem, key: string, index: number) {
       // node.label = node.type;
@@ -67,6 +88,15 @@ function parseScript(script: Script): TreeItem {
         variables.push({
           type: "Variable",
           label: (node.id as any).name,
+          description: "?",
+          iconPath: new vscode.ThemeIcon("symbol-variable"),
+          collapsibleState: vscode.TreeItemCollapsibleState.None,
+        });
+      } else if (node.type === "FunctionDeclaration") {
+        functions.push({
+          type: "Function",
+          label: (node.id as any).name,
+          iconPath: new vscode.ThemeIcon("symbol-function"),
           collapsibleState: vscode.TreeItemCollapsibleState.None,
         });
       }
@@ -77,12 +107,21 @@ function parseScript(script: Script): TreeItem {
   root = {
     type: "Script",
     label: "Script",
+    iconPath: new vscode.ThemeIcon("code"),
     children: [
       {
         type: "Variables",
         label: "Variables",
+        iconPath: new vscode.ThemeIcon("symbol-variable"),
         children: variables,
         collapsibleState: variables.length > 0 ? vscode.TreeItemCollapsibleState.Expanded : vscode.TreeItemCollapsibleState.None,
+      },
+      {
+        type: "Functions",
+        label: "Functions",
+        iconPath: new vscode.ThemeIcon("symbol-function"),
+        children: functions,
+        collapsibleState: functions.length > 0 ? vscode.TreeItemCollapsibleState.Expanded : vscode.TreeItemCollapsibleState.None,
       },
     ],
     collapsibleState: vscode.TreeItemCollapsibleState.Expanded,
