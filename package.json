@@ -25,8 +25,17 @@
         "icon": "$(add)"
       }
     ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "svelteCompanion",
+          "title": "Svelte companion",
+          "icon": "$(package)"
+        }
+      ]
+    },
     "views": {
-      "explorer": [
+      "svelteCompanion": [
         {
           "id": "svelteLayout",
           "name": "Svelte companion",
