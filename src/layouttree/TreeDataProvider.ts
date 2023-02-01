@@ -1,9 +1,8 @@
-import * as vscode from "vscode";
-import TreeItem from "./TreeItem";
 import * as svelte from "svelte/compiler";
+import * as vscode from "vscode";
 import parseScript from "./parsing/ParseScript";
-import parseStyle from "./parsing/ParseStyle";
 import parseTemplate from "./parsing/ParseTemplate";
+import TreeItem from "./TreeItem";
 class TreeDataProvider implements vscode.TreeDataProvider<TreeItem> {
   private _onDidChangeTreeData: vscode.EventEmitter<TreeItem | undefined> = new vscode.EventEmitter<TreeItem | undefined>();
   readonly onDidChangeTreeData: vscode.Event<TreeItem | undefined> = this._onDidChangeTreeData.event;
@@ -16,8 +15,8 @@ class TreeDataProvider implements vscode.TreeDataProvider<TreeItem> {
 
   getTreeItem(element: TreeItem): vscode.TreeItem | Thenable<vscode.TreeItem> {
     element.command = {
-      command: "svelte-companion.addCode",
-      title: "Add Code",
+      command: "svelte-companion.jumpToCode",
+      title: "Jump To Code",
       arguments: [element],
     };
     return element;
@@ -50,7 +49,7 @@ function parseCurrentFile(): TreeItem[] {
     // if (ast.module) data.push(parseScript(ast.module));
     if (ast.instance) data.push(parseScript(ast.instance));
     data.push(parseTemplate(ast.html));
-    if (ast.css) data.push(parseStyle(ast.css));
+    // if (ast.css) data.push(parseStyle(ast.css));
   } catch (error) {
     console.log("Parse error.");
   }

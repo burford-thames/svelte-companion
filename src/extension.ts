@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+import jumpToCode from "./layouttree/JumpToCode";
 import TreeDataProvider from "./layouttree/TreeDataProvider";
 import TreeItem from "./layouttree/TreeItem";
 import { addCode } from "./modifycode/AddCode";
@@ -18,6 +19,10 @@ export function activate(context: vscode.ExtensionContext) {
     tree.refresh();
   });
 
+  let jumpToCodeCommand = vscode.commands.registerCommand("svelte-companion.jumpToCode", (item: TreeItem) => {
+    jumpToCode(item.start || 0);
+  });
+
   // Fire the refresh command when the active text editor changes
   vscode.window.onDidChangeActiveTextEditor(() => {
     vscode.commands.executeCommand("svelte-companion.refreshLayoutTree");
@@ -31,6 +36,7 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(layoutTree);
   context.subscriptions.push(refreshCommand);
   context.subscriptions.push(addCodeCommand);
+  context.subscriptions.push(jumpToCodeCommand);
 }
 
 // This method is called when your extension is deactivated

@@ -23,6 +23,10 @@
         "command": "svelte-companion.addCode",
         "title": "Add code",
         "icon": "$(add)"
+      },
+      {
+        "command": "svelte-companion.jumpToCode",
+        "title": "Jump to code"
       }
     ],
     "viewsContainers": {
