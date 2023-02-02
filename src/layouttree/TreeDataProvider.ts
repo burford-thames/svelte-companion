@@ -2,6 +2,7 @@ import * as svelte from "svelte/compiler";
 import * as vscode from "vscode";
 import parseTemplate from "./parsing/ParseTemplate";
 import { TreeItem } from "./LayoutTreeTypes";
+import parseScript from "./parsing/ParseScript";
 class TreeDataProvider implements vscode.TreeDataProvider<TreeItem> {
   private _onDidChangeTreeData: vscode.EventEmitter<TreeItem | undefined> = new vscode.EventEmitter<TreeItem | undefined>();
   readonly onDidChangeTreeData: vscode.Event<TreeItem | undefined> = this._onDidChangeTreeData.event;
@@ -46,12 +47,11 @@ function parseCurrentFile(): TreeItem[] {
     // Parse the svelte file
     const ast = svelte.parse(source, { filename: editor.document.fileName });
     // if (ast.module) data.push(parseScript(ast.module));
-    // if (ast.instance) data.push(parseScript(ast.instance));
+    if (ast.instance) data.push(parseScript(ast.instance));
     data.push(parseTemplate(ast.html));
     // if (ast.css) data.push(parseStyle(ast.css));
   } catch (error) {
     console.log("Parse error.");
-    console.error(error);
   }
   return data;
 }
