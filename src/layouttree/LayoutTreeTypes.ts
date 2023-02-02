@@ -3,7 +3,6 @@ import * as vscode from 'vscode';
 
 export type TreeItem = vscode.TreeItem & {
   children?: TreeItem[];
-  hideChildren?: boolean;
   start?: number;
   end?: number;
 };

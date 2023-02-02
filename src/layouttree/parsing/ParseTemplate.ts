@@ -1,5 +1,5 @@
 import * as svelte from "svelte/compiler";
-import { Element, MustacheTag, TemplateNode, Text } from "svelte/types/compiler/interfaces";
+import { Attribute, Element, MustacheTag, TemplateNode, Text } from "svelte/types/compiler/interfaces";
 import * as vscode from "vscode";
 import { TreeItem, Node } from "../LayoutTreeTypes";
 
@@ -9,11 +9,10 @@ export default function parseTemplate(html: TemplateNode): TreeItem {
 
   svelte.walk(html, {
     enter(node: Node, parent: Node, key: string, index: number) {
-      // Create treeitem
+      // Create treeitem with defaults
       const treeItem: TreeItem = {
         label: node.type,
         children: [],
-        collapsibleState: vscode.TreeItemCollapsibleState.None,
         start: node.start,
         end: node.end,
       };
@@ -23,10 +22,11 @@ export default function parseTemplate(html: TemplateNode): TreeItem {
 
       // Set parent's tree's children
       if (parent && parent.treeItem) {
-        if (parent.treeItem.hideChildren !== true) {
-          parent.treeItem.children?.push(treeItem);
+        parent.treeItem.children?.push(treeItem);
+        // If parent's collapsibleState not set, then set it to expanded, otherwise leave it as is
+        if (parent.treeItem.collapsibleState === undefined) {
           parent.treeItem.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
-        } 
+        }
       }
 
       switch (node.type) {
@@ -40,7 +40,7 @@ export default function parseTemplate(html: TemplateNode): TreeItem {
           break;
         case "IfBlock":
           treeItem.label = "If";
-          treeItem.iconPath = new vscode.ThemeIcon("repo-sync"); // TODO: Change
+          treeItem.iconPath = new vscode.ThemeIcon("question");
           break;
         case "Element":
           treeItem.label = (node as Element).name;
@@ -63,9 +63,14 @@ export default function parseTemplate(html: TemplateNode): TreeItem {
         case "ArrowFunctionExpression":
           treeItem.label = "Arrow function";
           treeItem.iconPath = new vscode.ThemeIcon("symbol-function");
-          treeItem.hideChildren = true;
+          // treeItem.hideChildren = true;
+          treeItem.collapsibleState = vscode.TreeItemCollapsibleState.None;
           break;
-
+        case "Attribute":
+          treeItem.label = (node as Attribute).name;
+          treeItem.iconPath = new vscode.ThemeIcon("symbol-property");
+          treeItem.collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
+          break;
         default:
           treeItem.label = node.type;
           treeItem.iconPath = new vscode.ThemeIcon("folder");
