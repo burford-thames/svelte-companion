@@ -26,12 +26,16 @@ class TreeDataProvider implements vscode.TreeDataProvider<TreeItem> {
     const children = element ? element.children : this.data;
 
     // Filter out empty labels
-    return children?.filter((child) => child.label);
+    return children?.filter((child) => child.label && child.hidden !== true);
   }
 
   refresh(): void {
     this.data = parseCurrentFile();
     this._onDidChangeTreeData.fire(undefined);
+  }
+
+  refreshElement(element: TreeItem): void {
+    this._onDidChangeTreeData.fire(element);
   }
 }
 
