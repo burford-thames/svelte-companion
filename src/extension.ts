@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
-import jumpToCode from "./layouttree/JumpToCode";
+import jumpToCode from "./modifycode/JumpToCode";
 import TreeDataProvider from "./layouttree/TreeDataProvider";
-import TreeItem from "./layouttree/TreeItem";
+import { TreeItem } from "./layouttree/LayoutTreeTypes";
 import { addCode } from "./modifycode/AddCode";
 
 export function activate(context: vscode.ExtensionContext) {
@@ -52,7 +52,6 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(addElementCommand);
   context.subscriptions.push(addElementPropertiesCommand);
   context.subscriptions.push(deleteElementCommand);
-  
 }
 
 // This method is called when your extension is deactivated
