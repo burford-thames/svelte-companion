@@ -6,9 +6,25 @@ import { addCode } from "./modifycode/AddCode";
 
 export function activate(context: vscode.ExtensionContext) {
   // Register command that will be called when the user clicks on the tree item
+  let jumpToCodeCommand = vscode.commands.registerCommand("svelte-companion.jumpToCode", (item: TreeItem) => {
+    jumpToCode(item.start || 0);
+  });
+
   let addCodeCommand = vscode.commands.registerCommand("svelte-companion.addCode", (item: TreeItem) => {
     // Insert the text at the current cursor position
     addCode(item.start || 0, item.end || 0);
+  });
+
+  let addElementCommand = vscode.commands.registerCommand("svelte-companion.addElement", (item: TreeItem) => {
+    vscode.window.showInformationMessage("Add element");
+  });
+
+  let addElementPropertiesCommand = vscode.commands.registerCommand("svelte-companion.addElementProperties", (item: TreeItem) => {
+    vscode.window.showInformationMessage("Add element properties");
+  });
+
+  let deleteElementCommand = vscode.commands.registerCommand("svelte-companion.deleteElement", (item: TreeItem) => {
+    vscode.window.showInformationMessage("Delete element");
   });
 
   // Register the tree data provider
@@ -17,10 +33,6 @@ export function activate(context: vscode.ExtensionContext) {
 
   let refreshCommand = vscode.commands.registerCommand("svelte-companion.refreshLayoutTree", () => {
     tree.refresh();
-  });
-
-  let jumpToCodeCommand = vscode.commands.registerCommand("svelte-companion.jumpToCode", (item: TreeItem) => {
-    jumpToCode(item.start || 0);
   });
 
   // Fire the refresh command when the active text editor changes
@@ -37,6 +49,10 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(refreshCommand);
   context.subscriptions.push(addCodeCommand);
   context.subscriptions.push(jumpToCodeCommand);
+  context.subscriptions.push(addElementCommand);
+  context.subscriptions.push(addElementPropertiesCommand);
+  context.subscriptions.push(deleteElementCommand);
+  
 }
 
 // This method is called when your extension is deactivated

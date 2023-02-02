@@ -25,6 +25,21 @@
         "icon": "$(add)"
       },
       {
+        "command": "svelte-companion.addElement",
+        "title": "Add element",
+        "icon": "$(add)"
+      },
+      {
+        "command": "svelte-companion.addElementProperties",
+        "title": "Add element's properties",
+        "icon": "$(tools)"
+      },
+      {
+        "command": "svelte-companion.deleteElement",
+        "title": "Delete element",
+        "icon": "$(trash)"
+      },
+      {
         "command": "svelte-companion.jumpToCode",
         "title": "Jump to code"
       }
@@ -53,10 +68,18 @@
       ],
       "view/item/context": [
         {
-          "command": "svelte-companion.addCode",
+          "command": "svelte-companion.addElement",
           "when": "view == svelteLayout",
-          "group": "inline",
-          "icon": "bug"
+          "group": "inline"
+        },
+        {
+          "command": "svelte-companion.addElementProperties",
+          "when": "view == svelteLayout",
+          "group": "inline"
+        },
+        {
+          "command": "svelte-companion.deleteElement",
+          "when": "view == svelteLayout"
         }
       ]
     }
