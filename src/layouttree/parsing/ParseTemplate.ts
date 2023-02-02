@@ -1,5 +1,6 @@
 import * as svelte from "svelte/compiler";
 import { Attribute, Element, MustacheTag, TemplateNode, Text } from "svelte/types/compiler/interfaces";
+import EventHandler from "svelte/types/compiler/compile/nodes/EventHandler";
 import * as vscode from "vscode";
 import { TreeItem, Node } from "../LayoutTreeTypes";
 
@@ -49,6 +50,26 @@ export default function parseTemplate(html: TemplateNode): TreeItem {
         case "Text":
           treeItem.label = (node as Text).data.trim();
           treeItem.iconPath = new vscode.ThemeIcon("symbol-string");
+          if (parent.type === "Attribute") {
+            // If parent is an attribute, then parent's label is the value of the attributes
+            parent.treeItem!.description = treeItem.label;
+
+            // Split the attribute value into multiple tree items
+            const split = treeItem.label.split(" ");
+            parent.treeItem!.children = split.map((s) => {
+              const position = (treeItem.label as string).search(new RegExp('\\b' + s + '\\b'));
+              return {
+                label: s,
+                iconPath: new vscode.ThemeIcon("symbol-string"),
+                collapsibleState: vscode.TreeItemCollapsibleState.None,
+                start: node.start! + position,
+                end: node.start! + position + s.length,
+              };
+            });
+
+            // Hide the attribute's value
+            treeItem.label = "";
+          }
           break;
         case "MustacheTag":
           const editor = vscode.window.activeTextEditor;
@@ -59,11 +80,11 @@ export default function parseTemplate(html: TemplateNode): TreeItem {
           const text = editor?.document.getText(new vscode.Range(start.line - 1, start.column, end.line - 1, end.column));
           treeItem.label = text;
           treeItem.iconPath = new vscode.ThemeIcon("symbol-variable");
+          treeItem.collapsibleState = vscode.TreeItemCollapsibleState.None;
           break;
         case "ArrowFunctionExpression":
           treeItem.label = "Arrow function";
           treeItem.iconPath = new vscode.ThemeIcon("symbol-function");
-          // treeItem.hideChildren = true;
           treeItem.collapsibleState = vscode.TreeItemCollapsibleState.None;
           break;
         case "Attribute":
@@ -71,6 +92,22 @@ export default function parseTemplate(html: TemplateNode): TreeItem {
           treeItem.iconPath = new vscode.ThemeIcon("symbol-property");
           treeItem.collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
           break;
+        case "EventHandler":
+          treeItem.label = (node as EventHandler).name;
+          treeItem.iconPath = new vscode.ThemeIcon("symbol-event");
+          treeItem.collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
+          break;
+        case "CallExpression":
+          treeItem.label = "Call expression";
+          treeItem.iconPath = new vscode.ThemeIcon("symbol-function");
+          treeItem.collapsibleState = vscode.TreeItemCollapsibleState.None;
+          break;
+        case "Transition":
+          treeItem.label = "Transition";
+          treeItem.iconPath = new vscode.ThemeIcon("rocket");
+          treeItem.collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
+          break;
+
         default:
           treeItem.label = node.type;
           treeItem.iconPath = new vscode.ThemeIcon("folder");

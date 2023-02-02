@@ -63,9 +63,7 @@
       ]
     },
     "menus": {
-      "view/title": [
-        
-      ],
+      "view/title": [],
       "view/item/context": [
         {
           "command": "svelte-companion.addElement",
@@ -106,6 +104,7 @@
     "glob": "^8.0.3",
     "magic-string": "^0.27.0",
     "mocha": "^10.1.0",
+    "periscopic": "^3.1.0",
     "typescript": "^4.9.3"
   },
   "dependencies": {
