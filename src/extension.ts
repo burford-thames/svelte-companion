@@ -4,6 +4,7 @@ import TreeDataProvider from "./layouttree/TreeDataProvider";
 import { TreeItem } from "./layouttree/LayoutTreeTypes";
 import { addCode } from "./modifycode/AddCode";
 import addElement from "./modifycode/AddElement";
+import deleteElement from "./modifycode/DeleteElement";
 
 export function activate(context: vscode.ExtensionContext) {
   // Register the tree data provider
@@ -49,7 +50,7 @@ export function activate(context: vscode.ExtensionContext) {
   });
 
   let deleteElementCommand = vscode.commands.registerCommand("svelte-companion.deleteElement", (item: TreeItem) => {
-    vscode.window.showInformationMessage("Delete element");
+    deleteElement(item);
   });
 
   context.subscriptions.push(layoutTree);

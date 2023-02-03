@@ -28,7 +28,7 @@ export default function addElement(item: TreeItem) {
 
     // Build element
     let element: string;
-    
+
     // If the new element and the parent element are on the same line, add a new line
     const itemPosition = vscode.window.activeTextEditor?.document.positionAt(item.start ?? 0);
     if (itemPosition?.line === innerHtmlStart.line) {
