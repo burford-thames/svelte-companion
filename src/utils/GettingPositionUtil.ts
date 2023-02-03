@@ -6,8 +6,8 @@ export function getInnerHtmlStartingPosition(item: TreeItem) {
   const elementStartPosition = document?.positionAt(item.start || 0) || new vscode.Position(0, 0);
   let innerHtmlStart: vscode.Position;
 
-  // If the element has children that 'isElement' is true, then the inner html starts at the first child
-  const firstElementChild = item.children?.find((child) => child.isElement);
+  // If the element has a child that is element, then the inner html starts at the first child
+  const firstElementChild = item.children?.find((child) => child.contextValue === 'element');
   if (firstElementChild) {
     innerHtmlStart = document?.positionAt(firstElementChild.start || 0) || new vscode.Position(0, 0);
   } else {

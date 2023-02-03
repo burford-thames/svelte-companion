@@ -84,7 +84,7 @@
       "view/item/context": [
         {
           "command": "svelte-companion.addElement",
-          "when": "view == svelteLayout",
+          "when": "view == svelteLayout && viewItem == element",
           "group": "inline"
         },
         {

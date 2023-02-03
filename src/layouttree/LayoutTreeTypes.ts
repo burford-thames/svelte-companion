@@ -4,7 +4,6 @@ import * as vscode from 'vscode';
 export type TreeItem = vscode.TreeItem & {
   children?: TreeItem[];
   isSecondary: boolean;
-  isElement?: boolean;
   start?: number;
   end?: number;
 };
