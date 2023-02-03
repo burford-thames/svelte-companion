@@ -28,10 +28,6 @@ export default function parseTemplate(html: TemplateNode): TreeItem {
       // Set parent's tree's children
       if (parent && parent.treeItem) {
         parent.treeItem.children?.push(treeItem);
-        // If parent's collapsibleState not set, then set it to expanded, otherwise leave it as is
-        if (parent.treeItem.collapsibleState === undefined) {
-          parent.treeItem.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
-        }
       }
 
       switch (node.type) {
@@ -98,47 +94,42 @@ export default function parseTemplate(html: TemplateNode): TreeItem {
         case "Attribute":
           treeItem.label = (node as Attribute).name;
           treeItem.iconPath = new vscode.ThemeIcon("symbol-property");
-          treeItem.isSecondary = true,
-          treeItem.hidden = true,
+          treeItem.isSecondary = true;
           treeItem.collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
           break;
         case "EventHandler":
           treeItem.label = (node as EventHandler).name;
           treeItem.iconPath = new vscode.ThemeIcon("symbol-event");
-          treeItem.isSecondary = true,
-          treeItem.hidden = true,
+          treeItem.isSecondary = true;
           treeItem.collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
           break;
         case "CallExpression":
           treeItem.label = "Call expression";
           treeItem.iconPath = new vscode.ThemeIcon("symbol-function");
           treeItem.collapsibleState = vscode.TreeItemCollapsibleState.None;
+          treeItem.isSecondary = true;
           break;
         case "Binding":
           treeItem.label = (node as Binding).name;
           treeItem.iconPath = new vscode.ThemeIcon("key");
-          treeItem.isSecondary = true,
-          treeItem.hidden = true,
+          treeItem.isSecondary = true;
           treeItem.collapsibleState = vscode.TreeItemCollapsibleState.None;
           break;
         case "Transition":
           treeItem.label = (node as Transition).name;
           treeItem.iconPath = new vscode.ThemeIcon("pulse");
-          treeItem.isSecondary = true,
-          treeItem.hidden = true,
+          treeItem.isSecondary = true;
           treeItem.collapsibleState = vscode.TreeItemCollapsibleState.None;
           break;
         case "Animation":
           treeItem.label = (node as Animation).name;
           treeItem.iconPath = new vscode.ThemeIcon("pulse");
-          treeItem.isSecondary = true,
-          treeItem.hidden = true,
+          treeItem.isSecondary = true;
           treeItem.collapsibleState = vscode.TreeItemCollapsibleState.None;
           break;
 
         default:
-          treeItem.label = node.type;
-          treeItem.hidden = true;
+          treeItem.label = "";
           treeItem.iconPath = new vscode.ThemeIcon("folder");
           break;
       }

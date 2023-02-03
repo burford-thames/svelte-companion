@@ -29,6 +29,11 @@ export function activate(context: vscode.ExtensionContext) {
     jumpToCode(item.start || 0);
   });
 
+  let toggleSecondaryCommand = vscode.commands.registerCommand("svelte-companion.toggleSecondary", () => {
+    tree.hideSecondaryNode = !tree.hideSecondaryNode;
+    tree.refresh();
+  });
+
   let addCodeCommand = vscode.commands.registerCommand("svelte-companion.addCode", (item: TreeItem) => {
     // Insert the text at the current cursor position
     addCode(item.start || 0, item.end || 0);
@@ -54,6 +59,7 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(addElementCommand);
   context.subscriptions.push(addElementPropertiesCommand);
   context.subscriptions.push(deleteElementCommand);
+  context.subscriptions.push(toggleSecondaryCommand);
 }
 
 // This method is called when your extension is deactivated

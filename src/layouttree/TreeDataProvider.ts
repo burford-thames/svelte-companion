@@ -9,6 +9,8 @@ class TreeDataProvider implements vscode.TreeDataProvider<TreeItem> {
 
   data: TreeItem[] = [];
 
+  hideSecondaryNode: boolean = false;
+
   constructor() {
     this.data = parseCurrentFile();
   }
@@ -19,14 +21,26 @@ class TreeDataProvider implements vscode.TreeDataProvider<TreeItem> {
       title: "Jump To Code",
       arguments: [element],
     };
+    // If all children are secondary and hideSecondaryNode is true, then make this node collapsibleState None
+    if (!element.children || (this.hideSecondaryNode && element.children.every((child) => child.isSecondary))) {
+      element.collapsibleState = vscode.TreeItemCollapsibleState.None;
+    } else if (element.children.length > 0 && element.collapsibleState === undefined) {
+      element.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
+    }
+
     return element;
   }
 
   getChildren(element?: TreeItem | undefined): vscode.ProviderResult<TreeItem[]> {
     const children = element ? element.children : this.data;
 
+    // Filter out secondary nodes
+    if (this.hideSecondaryNode) {
+      return children?.filter((child) => !child.isSecondary && child.label);
+    }
+
     // Filter out empty labels
-    return children?.filter((child) => child.label && child.hidden !== true);
+    return children?.filter((child) => child.label);
   }
 
   refresh(): void {

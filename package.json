@@ -17,7 +17,8 @@
     "commands": [
       {
         "command": "svelte-companion.refreshLayoutTree",
-        "title": "Refresh layout tree"
+        "title": "Refresh layout tree",
+        "icon": "$(refresh)"
       },
       {
         "command": "svelte-companion.addCode",
@@ -42,6 +43,11 @@
       {
         "command": "svelte-companion.jumpToCode",
         "title": "Jump to code"
+      },
+      {
+        "command": "svelte-companion.toggleSecondary",
+        "title": "Toggle secondary nodes",
+        "icon": "$(eye)"
       }
     ],
     "viewsContainers": {
@@ -63,7 +69,18 @@
       ]
     },
     "menus": {
-      "view/title": [],
+      "view/title": [
+        {
+          "command": "svelte-companion.refreshLayoutTree",
+          "when": "view == svelteLayout",
+          "group": "navigation"
+        },
+        {
+          "command": "svelte-companion.toggleSecondary",
+          "when": "view == svelteLayout",
+          "group": "navigation"
+        }
+      ],
       "view/item/context": [
         {
           "command": "svelte-companion.addElement",
