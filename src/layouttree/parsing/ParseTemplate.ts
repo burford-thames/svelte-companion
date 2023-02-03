@@ -6,6 +6,7 @@ import { TreeItem, Node } from "../LayoutTreeTypes";
 import Binding from "svelte/types/compiler/compile/nodes/Binding";
 import Animation from "svelte/types/compiler/compile/nodes/Animation";
 import Transition from "svelte/types/compiler/compile/nodes/Transition";
+import { getCodeAtPositionFromNode } from "../../utils/GettingCodeUtil";
 
 // Parse the html code
 export default function parseTemplate(html: TemplateNode): TreeItem {
@@ -63,6 +64,7 @@ export default function parseTemplate(html: TemplateNode): TreeItem {
               const position = (treeItem.label as string).search(new RegExp("\\b" + s + "\\b"));
               return {
                 label: s,
+                type: "Class",
                 iconPath: new vscode.ThemeIcon("symbol-string"),
                 isSecondary: false,
                 collapsibleState: vscode.TreeItemCollapsibleState.None,
@@ -76,12 +78,8 @@ export default function parseTemplate(html: TemplateNode): TreeItem {
           }
           break;
         case "MustacheTag":
-          const editor = vscode.window.activeTextEditor;
           const expression = (node as MustacheTag).expression;
-          const start = expression.loc?.start ?? { line: 0, column: 0 };
-          const end = expression.loc?.end ?? { line: 0, column: 0 };
-
-          const text = editor?.document.getText(new vscode.Range(start.line - 1, start.column, end.line - 1, end.column));
+          const text = getCodeAtPositionFromNode(expression);
           treeItem.label = text;
           treeItem.iconPath = new vscode.ThemeIcon("symbol-variable");
           treeItem.collapsibleState = vscode.TreeItemCollapsibleState.None;

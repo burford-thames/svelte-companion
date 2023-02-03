@@ -26,7 +26,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   // Register command that will be called when the user clicks on the tree item
   let jumpToCodeCommand = vscode.commands.registerCommand("svelte-companion.jumpToCode", (item: TreeItem) => {
-    jumpToCode(item.start || 0);
+    jumpToCode(item);
   });
 
   let toggleSecondaryCommand = vscode.commands.registerCommand("svelte-companion.toggleSecondary", () => {
