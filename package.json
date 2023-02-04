@@ -16,14 +16,14 @@
   "contributes": {
     "commands": [
       {
+        "command": "svelte-companion.showPreview",
+        "title": "Show preview",
+        "icon": "$(eye)"
+      },
+      {
         "command": "svelte-companion.refreshLayoutTree",
         "title": "Refresh layout tree",
         "icon": "$(refresh)"
-      },
-      {
-        "command": "svelte-companion.addCode",
-        "title": "Add code",
-        "icon": "$(add)"
       },
       {
         "command": "svelte-companion.addElement",
@@ -69,6 +69,13 @@
       ]
     },
     "menus": {
+      "editor/title": [
+				{
+					"command": "svelte-companion.showPreview",
+					"when": "resourceExtname == .svelte",
+					"group": "navigation"
+				}
+      ],
       "view/title": [
         {
           "command": "svelte-companion.refreshLayoutTree",
@@ -97,7 +104,19 @@
           "when": "view == svelteLayout"
         }
       ]
-    }
+    },
+    "customEditors": [
+			{
+				"viewType": "svelte-companion.previewPanel",
+				"displayName": "Svelte preview",
+				"selector": [
+					{
+						"filenamePattern": "*.svelte"
+					}
+				],
+        "priority": "option"
+			}
+		]
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
@@ -119,9 +138,7 @@
     "eslint": "^8.28.0",
     "estree-walker": "^3.0.2",
     "glob": "^8.0.3",
-    "magic-string": "^0.27.0",
     "mocha": "^10.1.0",
-    "periscopic": "^3.1.0",
     "typescript": "^4.9.3"
   },
   "dependencies": {
