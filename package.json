@@ -70,11 +70,11 @@
     },
     "menus": {
       "editor/title": [
-				{
-					"command": "svelte-companion.showPreview",
-					"when": "resourceExtname == .svelte",
-					"group": "navigation"
-				}
+        {
+          "command": "svelte-companion.showPreview",
+          "when": "resourceExtname == .svelte",
+          "group": "navigation"
+        }
       ],
       "view/title": [
         {
@@ -104,19 +104,7 @@
           "when": "view == svelteLayout"
         }
       ]
-    },
-    "customEditors": [
-			{
-				"viewType": "svelte-companion.previewPanel",
-				"displayName": "Svelte preview",
-				"selector": [
-					{
-						"filenamePattern": "*.svelte"
-					}
-				],
-        "priority": "option"
-			}
-		]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
