@@ -17,37 +17,45 @@
     "commands": [
       {
         "command": "svelte-companion.showPreview",
-        "title": "Show preview",
+        "title": "Svelte companion: Show preview",
         "icon": "$(eye)"
       },
       {
         "command": "svelte-companion.refreshLayoutTree",
-        "title": "Refresh layout tree",
+        "title": "Svelte companion: Refresh layout tree",
         "icon": "$(refresh)"
       },
       {
         "command": "svelte-companion.addElement",
-        "title": "Add element",
+        "title": "Svelte companion: Add element",
         "icon": "$(add)"
       },
       {
         "command": "svelte-companion.addElementProperties",
-        "title": "Add element's properties",
+        "title": "Svelte companion: Add element's properties",
         "icon": "$(tools)"
       },
       {
         "command": "svelte-companion.deleteElement",
-        "title": "Delete element",
+        "title": "Svelte companion: Delete element",
         "icon": "$(trash)"
       },
       {
         "command": "svelte-companion.jumpToCode",
-        "title": "Jump to code"
+        "title": "Svelte companion: Jump to code"
       },
       {
         "command": "svelte-companion.toggleSecondary",
-        "title": "Toggle secondary nodes",
+        "title": "Svelte companion: Toggle secondary nodes",
         "icon": "$(eye)"
+      },
+      {
+        "command": "svelte-companion.injectPreviewCode",
+        "title": "Svelte companion: Inject preview code"
+      },
+      {
+        "command": "svelte-companion.disposePreviewCode",
+        "title": "Svelte companion: Dispose preview code"
       }
     ],
     "viewsContainers": {
@@ -102,6 +110,24 @@
         {
           "command": "svelte-companion.deleteElement",
           "when": "view == svelteLayout"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "svelte-companion.addElement",
+          "when": "false"
+        },
+        {
+          "command": "svelte-companion.addElementProperties",
+          "when": "false"
+        },
+        {
+          "command": "svelte-companion.deleteElement",
+          "when": "false"
+        },
+        {
+          "command": "svelte-companion.jumpToCode",
+          "when": "false"
         }
       ]
     }

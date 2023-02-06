@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { TreeItem } from '../layouttree/LayoutTreeTypes';
+import { TreeItem } from '../layouttree/types/LayoutTreeTypes';
 
 export function getInnerHtmlStartingPosition(item: TreeItem) {
   const document = vscode.window.activeTextEditor?.document;

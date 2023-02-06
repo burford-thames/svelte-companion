@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
-import { TreeItem } from "../layouttree/LayoutTreeTypes";
-import { getEditorSpacing, getElementSpacing, getInnerHtmlStartingPosition } from "../utils/GettingPositionUtil";
+import { TreeItem } from "../../layouttree/types/LayoutTreeTypes";
+import { getEditorSpacing, getElementSpacing, getInnerHtmlStartingPosition } from "../../utils/GettingPositionUtil";
 
 export default function addElement(item: TreeItem) {
   const innerHtmlStart = getInnerHtmlStartingPosition(item);

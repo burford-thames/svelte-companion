@@ -1,6 +1,6 @@
 import { Node } from "estree";
 import * as vscode from "vscode";
-import { TreeItem } from "../layouttree/LayoutTreeTypes";
+import { TreeItem } from "../layouttree/types/LayoutTreeTypes";
 
 export function getCodeAtPosition(start: number, end: number): string {
   const editor = vscode.window.activeTextEditor;
