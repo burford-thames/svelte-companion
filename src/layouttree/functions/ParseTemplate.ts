@@ -2,7 +2,7 @@ import * as svelte from "svelte/compiler";
 import { Attribute, Element, MustacheTag, TemplateNode, Text } from "svelte/types/compiler/interfaces";
 import EventHandler from "svelte/types/compiler/compile/nodes/EventHandler";
 import * as vscode from "vscode";
-import { TreeItem, Node } from "../types/LayoutTreeTypes";
+import { TreeItem, Node } from "../../types/LayoutTreeTypes";
 import Binding from "svelte/types/compiler/compile/nodes/Binding";
 import Animation from "svelte/types/compiler/compile/nodes/Animation";
 import Transition from "svelte/types/compiler/compile/nodes/Transition";

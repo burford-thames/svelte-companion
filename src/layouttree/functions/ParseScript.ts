@@ -1,7 +1,7 @@
 import * as svelte from "svelte/compiler";
 import { Script } from "svelte/types/compiler/interfaces";
 import * as vscode from "vscode";
-import { Node, TreeItem } from "../types/LayoutTreeTypes";
+import { Node, TreeItem } from "../../types/LayoutTreeTypes";
 
 export default function parseScript(script: Script): TreeItem {
   let root: TreeItem;

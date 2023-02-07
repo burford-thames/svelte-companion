@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { TreeItem } from "../../layouttree/types/LayoutTreeTypes";
+import { TreeItem } from "../../types/LayoutTreeTypes";
 import { getEditorSpacing, getElementSpacing, getInnerHtmlStartingPosition } from "../../utils/GettingPositionUtil";
 
 export default function addElement(item: TreeItem) {

@@ -1,7 +1,7 @@
 import * as svelte from "svelte/compiler";
 import * as vscode from "vscode";
 import parseTemplate from "./functions/ParseTemplate";
-import { TreeItem } from "./types/LayoutTreeTypes";
+import { TreeItem } from "../types/LayoutTreeTypes";
 import parseScript from "./functions/ParseScript";
 class TreeDataProvider implements vscode.TreeDataProvider<TreeItem> {
   private _onDidChangeTreeData: vscode.EventEmitter<TreeItem | undefined> = new vscode.EventEmitter<TreeItem | undefined>();

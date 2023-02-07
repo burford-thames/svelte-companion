@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { TreeItem } from "../types/LayoutTreeTypes";
+import { TreeItem } from "../../types/LayoutTreeTypes";
 
 export default function jumpToCode(item: TreeItem) {
   // Get the column and line number of the destination

@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { TreeItem } from "../../layouttree/types/LayoutTreeTypes";
+import { TreeItem } from "../../types/LayoutTreeTypes";
 
 export default function deleteElement(item: TreeItem) {
   const editor = vscode.window.activeTextEditor;

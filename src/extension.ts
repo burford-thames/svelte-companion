@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import jumpToCode from "./layouttree/functions/JumpToCode";
 import TreeDataProvider from "./layouttree/TreeDataProvider";
-import { TreeItem } from "./layouttree/types/LayoutTreeTypes";
+import { TreeItem } from "./types/LayoutTreeTypes";
 import addElement from "./modifycode/functions/AddElement";
 import deleteElement from "./modifycode/functions/DeleteElement";
 import PreviewCodeInjector from "./previewpanel/PreviewCodeInjector";
