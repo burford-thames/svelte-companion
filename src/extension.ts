@@ -7,22 +7,17 @@ import deleteElement from "./modifycode/functions/DeleteElement";
 import PreviewCodeInjector from "./previewpanel/PreviewCodeInjector";
 
 export function activate(context: vscode.ExtensionContext) {
+  let workspace = vscode.workspace.workspaceFolders;
+  if (!workspace) {
+    throw new Error("No workspace found");
+  }
+
   //#region Tree data provider
   let tree = new TreeDataProvider();
   let layoutTree = vscode.window.registerTreeDataProvider("svelteLayout", tree);
 
   let refreshCommand = vscode.commands.registerCommand("svelte-companion.refreshLayoutTree", () => {
     tree.refresh();
-  });
-
-  // Fire the refresh command when the active text editor changes
-  const onDidChangeActiveTextEditor = vscode.window.onDidChangeActiveTextEditor(() => {
-    vscode.commands.executeCommand("svelte-companion.refreshLayoutTree");
-  });
-
-  // Fire the refresh command when text changes
-  const onDidChangeTextDocument = vscode.workspace.onDidChangeTextDocument(() => {
-    vscode.commands.executeCommand("svelte-companion.refreshLayoutTree");
   });
 
   // Register command that will be called when the user clicks on the tree item
@@ -42,11 +37,9 @@ export function activate(context: vscode.ExtensionContext) {
 
   // Register command that open preview panel to the side
   let openPreviewCommand = vscode.commands.registerCommand("svelte-companion.showPreview", () => {
-    // Split and Open the preview panel to the side
-    // vscode.commands.executeCommand("vscode.openWith", vscode.window.activeTextEditor?.document.uri, "svelte-companion.previewPanel", { viewColumn: vscode.ViewColumn.Beside });
-    
     // Open simple vscode browser preview to the side
-    vscode.commands.executeCommand("simpleBrowser.show", vscode.Uri.parse("https://svelte.dev/repl/"));
+    vscode.commands.executeCommand("workbench.action.newGroupRight");
+    vscode.commands.executeCommand("simpleBrowser.show", vscode.Uri.parse("http://localhost:5173/svelte-companion/index.html"));
   });
 
   let injectPreviewCodeCommand = vscode.commands.registerCommand("svelte-companion.injectPreviewCode", () => {
@@ -72,6 +65,17 @@ export function activate(context: vscode.ExtensionContext) {
     deleteElement(item);
   });
   //#endregion
+
+  // Fire the refresh command when the active text editor changes
+  const onDidChangeActiveTextEditor = vscode.window.onDidChangeActiveTextEditor(() => {
+    vscode.commands.executeCommand("svelte-companion.refreshLayoutTree");
+    previewCodeInjector.refreshPreviewCode();
+  });
+
+  // Fire the refresh command when text changes
+  const onDidChangeTextDocument = vscode.workspace.onDidChangeTextDocument(() => {
+    vscode.commands.executeCommand("svelte-companion.refreshLayoutTree");
+  });
 
   context.subscriptions.push(layoutTree);
   context.subscriptions.push(refreshCommand);
