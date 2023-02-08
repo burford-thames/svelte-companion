@@ -5,11 +5,19 @@ import { TreeItem } from "./types/LayoutTreeTypes";
 import addElement from "./modifycode/functions/AddElement";
 import deleteElement from "./modifycode/functions/DeleteElement";
 import PreviewCodeInjector from "./previewpanel/PreviewCodeInjector";
+import { getProjectType } from "./utils/GetProjectTypeUtil";
+
+let previewCodeInjector: PreviewCodeInjector;
 
 export function activate(context: vscode.ExtensionContext) {
-  let workspace = vscode.workspace.workspaceFolders;
+  const workspace = vscode.workspace.workspaceFolders;
   if (!workspace) {
-    throw new Error("No workspace found");
+    return;
+  }
+  
+  const projectType = getProjectType();
+  if (projectType === undefined) {
+    return;
   }
 
   //#region Tree data provider
@@ -33,7 +41,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   //#region Preview
   // Initialize the code injector
-  const previewCodeInjector = new PreviewCodeInjector();
+  previewCodeInjector = new PreviewCodeInjector(projectType);
 
   // Register command that open preview panel to the side
   let openPreviewCommand = vscode.commands.registerCommand("svelte-companion.showPreview", () => {
@@ -77,6 +85,7 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.commands.executeCommand("svelte-companion.refreshLayoutTree");
   });
 
+  context.subscriptions.push(previewCodeInjector.statusBarItem);
   context.subscriptions.push(layoutTree);
   context.subscriptions.push(refreshCommand);
   context.subscriptions.push(jumpToCodeCommand);

@@ -5,7 +5,7 @@ import { CodeInjectorType } from '../types/PreviewCodeInjectorType';
 import { pathExists } from './FileUtil';
 
 // Find out whether the project is a SvelteKit project or a Svelte project
-export function getProjectType(): CodeInjectorType {
+export function getProjectType(): CodeInjectorType | undefined {
   // Get the list of dependencies from the package.json file
   const packageJsonPath = path.join(vscode.workspace.workspaceFolders?.[0].uri.fsPath || '', 'package.json');
   const dependencies = getDepsInPackageJson(packageJsonPath);
@@ -16,7 +16,7 @@ export function getProjectType(): CodeInjectorType {
   } else if (dependencies.includes('svelte')) {
     return 'Svelte';
   } else {
-    throw new Error('This extension only works with Svelte or SvelteKit projects');
+    return undefined;
   }
 }
 

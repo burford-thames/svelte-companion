@@ -1,19 +1,19 @@
-import * as vscode from "vscode";
 import * as fs from "fs";
-import { getProjectType } from "../utils/GetProjectTypeUtil";
+import * as vscode from "vscode";
+import { CodeInjectorType } from "../types/PreviewCodeInjectorType";
 import { disposeSvelteKitPreview, injectSvelteKitPreview, refreshSvelteKitPreview } from "./functions/SvelteKitPreview";
 import { disposeSveltePreview, injectSveltePreview, refreshSveltePreview } from "./functions/SveltePreview";
-import { CodeInjectorType } from "../types/PreviewCodeInjectorType";
 
 export default class PreviewCodeInjector {
   type: CodeInjectorType;
   injected: boolean;
   workspaceRoot: string;
+  statusBarItem: vscode.StatusBarItem;
 
-  constructor() {
-    this.type = getProjectType();
+  constructor(type: CodeInjectorType) {
+    this.type = type;
     this.workspaceRoot = vscode.workspace.workspaceFolders?.[0].uri.fsPath!;
-    
+
     // Check if file index.html exists in the svelte-companion folder
     const svelteCompanionIndex = vscode.Uri.file(`${this.workspaceRoot}/svelte-companion/index.html`);
     try {
@@ -21,6 +21,10 @@ export default class PreviewCodeInjector {
     } catch (error) {
       this.injected = false;
     }
+
+    this.statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
+    this.updateStatusBar();
+    this.statusBarItem.show();
   }
 
   public injectPreviewCode() {
@@ -35,6 +39,7 @@ export default class PreviewCodeInjector {
       injectSveltePreview(this.workspaceRoot);
     }
     this.injected = true;
+    this.updateStatusBar();
   }
 
   public disposePreviewCode() {
@@ -48,6 +53,7 @@ export default class PreviewCodeInjector {
       disposeSveltePreview(this.workspaceRoot);
     }
     this.injected = false;
+    this.updateStatusBar();
   }
 
   public refreshPreviewCode() {
@@ -59,6 +65,16 @@ export default class PreviewCodeInjector {
       refreshSvelteKitPreview(this.workspaceRoot);
     } else if (this.type === "Svelte") {
       refreshSveltePreview(this.workspaceRoot);
+    }
+  }
+
+  updateStatusBar() {
+    if (this.injected) {
+      this.statusBarItem.text = "$(circle-slash) Dispose";
+      this.statusBarItem.command = "svelte-companion.disposePreviewCode";
+    } else {
+      this.statusBarItem.text = "$(debug-disconnect) Inject";
+      this.statusBarItem.command = "svelte-companion.injectPreviewCode";
     }
   }
 }
