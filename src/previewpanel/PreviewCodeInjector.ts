@@ -1,5 +1,6 @@
 import * as fs from "fs";
 import * as vscode from "vscode";
+import * as path from "path";
 import { CodeInjectorType } from "../types/PreviewCodeInjectorType";
 import { disposeSvelteKitPreview, injectSvelteKitPreview, refreshSvelteKitPreview } from "./functions/SvelteKitPreview";
 import { disposeSveltePreview, injectSveltePreview, refreshSveltePreview } from "./functions/SveltePreview";
@@ -7,20 +8,13 @@ import { disposeSveltePreview, injectSveltePreview, refreshSveltePreview } from 
 export default class PreviewCodeInjector {
   type: CodeInjectorType;
   injected: boolean;
-  workspaceRoot: string;
+  injectionFolder: vscode.Uri;
   statusBarItem: vscode.StatusBarItem;
 
   constructor(type: CodeInjectorType) {
     this.type = type;
-    this.workspaceRoot = vscode.workspace.workspaceFolders?.[0].uri.fsPath!;
-
-    // Check if file index.html exists in the svelte-companion folder
-    const svelteCompanionIndex = vscode.Uri.file(`${this.workspaceRoot}/svelte-companion/index.html`);
-    try {
-      this.injected = fs.statSync(svelteCompanionIndex.fsPath).isFile();
-    } catch (error) {
-      this.injected = false;
-    }
+    this.injectionFolder = this.getInjectionFolder();
+    this.injected = this.getInjectionStatus();
 
     this.statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
     this.updateStatusBar();
@@ -28,29 +22,20 @@ export default class PreviewCodeInjector {
   }
 
   public injectPreviewCode() {
-    if (this.injected) {
-      vscode.window.showInformationMessage("Svelte Companion preview code is already injected");
-      return;
-    }
-
     if (this.type === "SvelteKit") {
-      injectSvelteKitPreview(this.workspaceRoot);
+      injectSvelteKitPreview(this.injectionFolder);
     } else if (this.type === "Svelte") {
-      injectSveltePreview(this.workspaceRoot);
+      injectSveltePreview(this.injectionFolder);
     }
     this.injected = true;
     this.updateStatusBar();
   }
 
   public disposePreviewCode() {
-    if (!this.injected) {
-      vscode.window.showInformationMessage("Svelte Companion preview code is not injected");
-      return;
-    }
     if (this.type === "SvelteKit") {
-      disposeSvelteKitPreview(this.workspaceRoot);
+      disposeSvelteKitPreview(this.injectionFolder);
     } else if (this.type === "Svelte") {
-      disposeSveltePreview(this.workspaceRoot);
+      disposeSveltePreview(this.injectionFolder);
     }
     this.injected = false;
     this.updateStatusBar();
@@ -62,9 +47,9 @@ export default class PreviewCodeInjector {
     }
 
     if (this.type === "SvelteKit") {
-      refreshSvelteKitPreview(this.workspaceRoot);
+      refreshSvelteKitPreview(this.injectionFolder);
     } else if (this.type === "Svelte") {
-      refreshSveltePreview(this.workspaceRoot);
+      refreshSveltePreview(this.injectionFolder);
     }
   }
 
@@ -75,6 +60,29 @@ export default class PreviewCodeInjector {
     } else {
       this.statusBarItem.text = "$(debug-disconnect) Inject";
       this.statusBarItem.command = "svelte-companion.injectPreviewCode";
+    }
+  }
+
+  getInjectionFolder(): vscode.Uri {
+    const workspacePath = vscode.workspace.workspaceFolders![0].uri.fsPath;
+    let injectionPath: string;
+    if (this.type === "SvelteKit") {
+      injectionPath = path.join(workspacePath, "src", "routes", "svelte-companion");
+    } else if (this.type === "Svelte") {
+      injectionPath = path.join(workspacePath, "svelte-companion");
+    } else {
+      throw new Error("Invalid type");
+    }
+    return vscode.Uri.file(injectionPath);
+  }
+
+  getInjectionStatus(): boolean {
+    try {
+      // Check if injection folder exists
+      fs.accessSync(this.injectionFolder.fsPath, fs.constants.F_OK);
+      return true;
+    } catch (error) {
+      return false;
     }
   }
 }

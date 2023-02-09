@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 
-export function injectSvelteKitPreview(workspaceRoot: string) {
+export function injectSvelteKitPreview(injectionFolder: vscode.Uri) {
   // Get the path to the routes folder
   const routesFolder = vscode.workspace.getConfiguration("svelte-companion").get("routesFolder") as string;
   const routesFolderPath = vscode.Uri.file(routesFolder);
@@ -9,7 +9,7 @@ export function injectSvelteKitPreview(workspaceRoot: string) {
   vscode.workspace.fs.delete(routesFolderPath);
 }
 
-export function disposeSvelteKitPreview(workspaceRoot: string) {
+export function disposeSvelteKitPreview(injectionFolder: vscode.Uri) {
   // Get the path to the routes folder
   const routesFolder = vscode.workspace.getConfiguration("svelte-companion").get("routesFolder") as string;
   const routesFolderPath = vscode.Uri.file(routesFolder);
@@ -18,4 +18,4 @@ export function disposeSvelteKitPreview(workspaceRoot: string) {
   vscode.workspace.fs.delete(routesFolderPath);
 }
 
-export function refreshSvelteKitPreview(workspaceRoot: string) {}
+export function refreshSvelteKitPreview(injectionFolder: vscode.Uri) {}

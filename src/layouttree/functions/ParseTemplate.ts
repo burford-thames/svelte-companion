@@ -69,7 +69,7 @@ export default function parseTemplate(html: TemplateNode): TreeItem {
                 iconPath: new vscode.ThemeIcon("symbol-string"),
                 isSecondary: false,
                 collapsibleState: vscode.TreeItemCollapsibleState.None,
-                start: node.start! + position,
+                start: node.start! + position + 1,
                 end: node.start! + position + s.length,
               };
             });

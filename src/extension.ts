@@ -52,6 +52,9 @@ export function activate(context: vscode.ExtensionContext) {
 
   let injectPreviewCodeCommand = vscode.commands.registerCommand("svelte-companion.injectPreviewCode", () => {
     previewCodeInjector.injectPreviewCode();
+    // Open simple vscode browser preview to the side
+    vscode.commands.executeCommand("workbench.action.newGroupRight");
+    vscode.commands.executeCommand("simpleBrowser.show", vscode.Uri.parse("http://localhost:5173/svelte-companion/index.html"));
   });
 
   let disposePreviewCodeCommand = vscode.commands.registerCommand("svelte-companion.disposePreviewCode", () => {
