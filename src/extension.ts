@@ -6,6 +6,7 @@ import addElement from "./modifycode/functions/AddElement";
 import deleteElement from "./modifycode/functions/DeleteElement";
 import PreviewCodeInjector from "./previewpanel/PreviewCodeInjector";
 import { getProjectType } from "./utils/GetProjectTypeUtil";
+import openPreviewPanel from "./previewpanel/functions/OpenPreviewPanel";
 
 let previewCodeInjector: PreviewCodeInjector;
 
@@ -46,15 +47,13 @@ export function activate(context: vscode.ExtensionContext) {
   // Register command that open preview panel to the side
   let openPreviewCommand = vscode.commands.registerCommand("svelte-companion.showPreview", () => {
     // Open simple vscode browser preview to the side
-    vscode.commands.executeCommand("workbench.action.newGroupRight");
-    vscode.commands.executeCommand("simpleBrowser.show", vscode.Uri.parse("http://localhost:5173/svelte-companion/index.html"));
+    openPreviewPanel(previewCodeInjector);
   });
 
   let injectPreviewCodeCommand = vscode.commands.registerCommand("svelte-companion.injectPreviewCode", () => {
     previewCodeInjector.injectPreviewCode();
     // Open simple vscode browser preview to the side
-    vscode.commands.executeCommand("workbench.action.newGroupRight");
-    vscode.commands.executeCommand("simpleBrowser.show", vscode.Uri.parse("http://localhost:5173/svelte-companion/index.html"));
+    openPreviewPanel(previewCodeInjector);
   });
 
   let disposePreviewCodeCommand = vscode.commands.registerCommand("svelte-companion.disposePreviewCode", () => {

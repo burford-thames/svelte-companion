@@ -1,5 +1,6 @@
 import * as vscode from "vscode";
 import * as path from "path";
+import getComponentFilePath from "../../utils/GetComponentFilePath";
 
 export function injectSveltePreview(injectionFolder: vscode.Uri) {
   vscode.workspace.fs.createDirectory(injectionFolder);
@@ -54,11 +55,15 @@ export let name;
   vscode.workspace.fs.writeFile(svelteFile, svelteFileContent);
 }
 
-function injectMainJsFile(injectionFolder: vscode.Uri) {
+function injectMainJsFile(injectionFolder: vscode.Uri, componentFilePath?: string) {
   // Create a new file named main.js in the svelte-companion folder
   const mainJsFile = vscode.Uri.file(path.join(injectionFolder.fsPath, "main.js"));
+  if (!componentFilePath) {
+    componentFilePath = getComponentFilePath();
+  }
+
   const mainJsFileContent = Buffer.from(
-    `import App from "${getComponentFilePathToInject()}";
+    `import App from "${componentFilePath}";
 
 const app = new App({
   target: document.getElementById("svelte"),
@@ -74,25 +79,10 @@ export default app;`,
 }
 
 function updateMainJsFile(injectionFolder: vscode.Uri) {
-  if (getComponentFilePathToInject() === "./App.svelte") {
+  const componentFilePath = getComponentFilePath();
+  if (componentFilePath === "./App.svelte") {
     return;
   }
 
-  injectMainJsFile(injectionFolder);
-}
-
-function getComponentFilePathToInject(): string {
-  // Get the relative path of the active file
-  if (!vscode.window.activeTextEditor) {
-    return "./App.svelte";
-  }
-
-  let componentFilePath = vscode.workspace.asRelativePath(vscode.window.activeTextEditor.document.uri.fsPath, false);
-
-  // If the active file is a .svelte file, import it
-  if (!componentFilePath?.endsWith(".svelte")) {
-    return "./App.svelte";
-  }
-
-  return "../" + componentFilePath;
+  injectMainJsFile(injectionFolder, componentFilePath);
 }
