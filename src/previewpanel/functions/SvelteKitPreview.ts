@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import * as path from "path";
 import getComponentFilePath from "../../utils/GetComponentFilePath";
+import { getComponentDefaultProps } from "../../utils/GetDefaultProps";
 
 export function injectSvelteKitPreview(injectionFolder: vscode.Uri) {
   vscode.workspace.fs.createDirectory(injectionFolder);
@@ -30,12 +31,16 @@ function injectPageFile(injectionFolder: vscode.Uri, componentFilePath?: string)
     componentFilePath = getComponentFilePath();
   }
 
+  const props: string = getComponentDefaultProps(componentFilePath);
+
   const indexFileContent = Buffer.from(
     `<script>
   import App from "${componentFilePath}";
+
+  const props = ${props};
 </script>
 
-<App />`,
+<App {...props}/>`,
     "utf-8"
   );
   vscode.workspace.fs.writeFile(indexFile, indexFileContent);
