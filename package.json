@@ -130,12 +130,12 @@
         },
         {
           "command": "svelte-companion.addElementProperties",
-          "when": "view == svelteLayout",
+          "when": "view == svelteLayout && viewItem == element",
           "group": "inline"
         },
         {
           "command": "svelte-companion.deleteElement",
-          "when": "view == svelteLayout"
+          "when": "view == svelteLayout && viewItem != variables && viewItem != functions"
         }
       ],
       "commandPalette": [
