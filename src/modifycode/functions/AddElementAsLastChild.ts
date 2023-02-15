@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { TreeItem } from "../../types/LayoutTreeTypes";
-import { getEditorSpacing, getElementSpacing, getInnerHtmlEndingPosition, getInnerHtmlStartingPosition } from "../../utils/GettingPositionUtil";
+import { getEditorSpacing, getElementSpacing, getInnerHtmlEndingPosition } from "../../utils/GettingPositionUtil";
 import { globalTags, specificTags } from "../data";
 
 export default function addElementAsLastChild(item: TreeItem) {

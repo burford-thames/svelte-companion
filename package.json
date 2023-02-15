@@ -39,6 +39,11 @@
         "title": "Add element below"
       },
       {
+        "command": "svelte-companion.addElementToTemplate",
+        "title": "Add element to template",
+        "icon": "$(add)"
+      },
+      {
         "command": "svelte-companion.addElementProperties",
         "title": "Svelte companion: Add element's properties",
         "icon": "$(tools)"
@@ -119,6 +124,11 @@
           "when": "view == svelteLayout && viewItem == element"
         },
         {
+          "command": "svelte-companion.addElementToTemplate",
+          "when": "view == svelteLayout && viewItem == template",
+          "group": "inline"
+        },
+        {
           "command": "svelte-companion.addElementProperties",
           "when": "view == svelteLayout",
           "group": "inline"
@@ -139,6 +149,10 @@
         },
         {
           "command": "svelte-companion.addElementBelow",
+          "when": "false"
+        },
+        {
+          "command": "svelte-companion.addElementToTemplate",
           "when": "false"
         },
         {
