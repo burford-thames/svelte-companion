@@ -37,7 +37,7 @@
       },
       {
         "command": "svelte-companion.deleteElement",
-        "title": "Svelte companion: Delete element",
+        "title": "Delete",
         "icon": "$(trash)"
       },
       {

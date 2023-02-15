@@ -1,0 +1,1 @@
+export type InsertPositionType = 'firstChild' | 'lastChild' | 'above' | 'below';

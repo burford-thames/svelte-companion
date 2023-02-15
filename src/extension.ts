@@ -63,7 +63,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   //#region Modify code
   let addElementCommand = vscode.commands.registerCommand("svelte-companion.addElement", (item: TreeItem) => {
-    addElement(item);
+    addElement(item, "lastChild");
     tree.refreshElement(item);
   });
 
