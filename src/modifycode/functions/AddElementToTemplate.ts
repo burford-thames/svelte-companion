@@ -21,6 +21,7 @@ export function addElementToTemplate(item: TreeItem) {
     vscode.window.activeTextEditor?.edit((editBuilder) => {
       editBuilder.insert(insertPosition, element);
     });
+    vscode.window.activeTextEditor?.document.save();
 
     // Hide quick pick
     quickPick.hide();

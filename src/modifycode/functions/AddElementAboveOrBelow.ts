@@ -43,6 +43,7 @@ function addElementAboveOrBelow(item: TreeItem, position: "above" | "below") {
     vscode.window.activeTextEditor?.edit((editBuilder) => {
       editBuilder.insert(insertPosition, element);
     });
+    vscode.window.activeTextEditor?.document.save();
 
     // Hide quick pick
     quickPick.hide();

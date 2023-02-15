@@ -26,4 +26,5 @@ export default function deleteElement(item: TreeItem) {
   editor.edit((editBuilder) => {
     editBuilder.delete(selectionToBeDeleted);
   });
+  vscode.window.activeTextEditor?.document.save();
 }
