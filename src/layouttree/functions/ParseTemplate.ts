@@ -29,13 +29,14 @@ export default function parseTemplate(html: TemplateNode): TreeItem {
       // Set parent's tree's children
       if (parent && parent.treeItem) {
         parent.treeItem.children?.push(treeItem);
+        treeItem.parent = parent.treeItem;
       }
 
       switch (node.type) {
         case "Fragment":
           treeItem.label = "Template";
           treeItem.iconPath = new vscode.ThemeIcon("vm");
-          treeItem.contextValue = "element";
+          treeItem.contextValue = "template";
           break;
         case "EachBlock":
           treeItem.label = "Each";

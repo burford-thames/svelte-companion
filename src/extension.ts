@@ -2,11 +2,12 @@ import * as vscode from "vscode";
 import jumpToCode from "./layouttree/functions/JumpToCode";
 import TreeDataProvider from "./layouttree/TreeDataProvider";
 import { TreeItem } from "./types/LayoutTreeTypes";
-import addElement from "./modifycode/functions/AddElement";
+import addElementAsLastChild from "./modifycode/functions/AddElementAsLastChild";
 import deleteElement from "./modifycode/functions/DeleteElement";
 import PreviewCodeInjector from "./previewpanel/PreviewCodeInjector";
 import { getProjectType } from "./utils/GetProjectTypeUtil";
 import openPreviewPanel from "./previewpanel/functions/OpenPreviewPanel";
+import { addElementAbove, addElementBelow } from "./modifycode/functions/AddElementAboveOrBelow";
 
 let previewCodeInjector: PreviewCodeInjector;
 
@@ -63,8 +64,15 @@ export function activate(context: vscode.ExtensionContext) {
 
   //#region Modify code
   let addElementCommand = vscode.commands.registerCommand("svelte-companion.addElement", (item: TreeItem) => {
-    addElement(item, "lastChild");
-    tree.refreshElement(item);
+    addElementAsLastChild(item);
+  });
+
+  let addElementAboveCommand = vscode.commands.registerCommand("svelte-companion.addElementAbove", (item: TreeItem) => {
+    addElementAbove(item);
+  });
+
+  let addElementBelowCommand = vscode.commands.registerCommand("svelte-companion.addElementBelow", (item: TreeItem) => {
+    addElementBelow(item);
   });
 
   let addElementPropertiesCommand = vscode.commands.registerCommand("svelte-companion.addElementProperties", (item: TreeItem) => {
@@ -92,6 +100,8 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(refreshCommand);
   context.subscriptions.push(jumpToCodeCommand);
   context.subscriptions.push(addElementCommand);
+  context.subscriptions.push(addElementAboveCommand);
+  context.subscriptions.push(addElementBelowCommand);
   context.subscriptions.push(addElementPropertiesCommand);
   context.subscriptions.push(deleteElementCommand);
   context.subscriptions.push(toggleSecondaryCommand);

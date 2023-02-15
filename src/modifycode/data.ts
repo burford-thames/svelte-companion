@@ -2,14 +2,14 @@ import { QuickPickItem, QuickPickItemKind as K } from "vscode";
 
 export const globalTags: QuickPickItem[] = [
   { label: "Common", kind: K.Separator },
+  { label: "div", description: "Section" },
+  { label: "span", description: "Section" },
+  { label: "p", description: "Paragraph" },
   { label: "a", description: "Hyperlink" },
   { label: "button", description: "Button" },
   { label: "br", description: "Single line break" },
   { label: "hr", description: "Horizontal rule" },
-  { label: "div", description: "Section" },
-  { label: "span", description: "Section" },
   { label: "i", description: "Icon" },
-  { label: "p", description: "Paragraph" },
   { label: "table", description: "Table" },
 
   { label: "Media / Graphics", kind: K.Separator },

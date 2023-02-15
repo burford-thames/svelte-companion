@@ -31,6 +31,14 @@
         "icon": "$(add)"
       },
       {
+        "command": "svelte-companion.addElementAbove",
+        "title": "Add element above"
+      },
+      {
+        "command": "svelte-companion.addElementBelow",
+        "title": "Add element below"
+      },
+      {
         "command": "svelte-companion.addElementProperties",
         "title": "Svelte companion: Add element's properties",
         "icon": "$(tools)"
@@ -103,6 +111,14 @@
           "group": "inline"
         },
         {
+          "command": "svelte-companion.addElementAbove",
+          "when": "view == svelteLayout && viewItem == element"
+        },
+        {
+          "command": "svelte-companion.addElementBelow",
+          "when": "view == svelteLayout && viewItem == element"
+        },
+        {
           "command": "svelte-companion.addElementProperties",
           "when": "view == svelteLayout",
           "group": "inline"
@@ -115,6 +131,14 @@
       "commandPalette": [
         {
           "command": "svelte-companion.addElement",
+          "when": "false"
+        },
+        {
+          "command": "svelte-companion.addElementAbove",
+          "when": "false"
+        },
+        {
+          "command": "svelte-companion.addElementBelow",
           "when": "false"
         },
         {
