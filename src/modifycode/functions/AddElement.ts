@@ -1,22 +1,18 @@
 import * as vscode from "vscode";
 import { TreeItem } from "../../types/LayoutTreeTypes";
 import { getEditorSpacing, getElementSpacing, getInnerHtmlStartingPosition } from "../../utils/GettingPositionUtil";
+import { globalTags, specificTags } from "../data";
 
 export default function addElement(item: TreeItem) {
   const innerHtmlStart = getInnerHtmlStartingPosition(item);
   const elementSpacing = getElementSpacing(item);
   const editorSpacing = getEditorSpacing();
 
-  // Declare list of possible elements
-  const elements: string[] = ["a", "abbr", "address", "area", "article", "aside", "audio", "b", "base", "bdi", "bdo", "p"];
-
   // Create quick pick
   const quickPick = vscode.window.createQuickPick();
-  quickPick.items = elements.map((e) => {
-    return {
-      label: e,
-    };
-  });
+
+  const specificChildElementsForThisElement = specificTags.get(item.label as string) ?? [];
+  quickPick.items = [...specificChildElementsForThisElement, ...globalTags];
 
   // Show quick pick
   quickPick.show();

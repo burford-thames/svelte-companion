@@ -35,6 +35,7 @@ export default function parseTemplate(html: TemplateNode): TreeItem {
         case "Fragment":
           treeItem.label = "Template";
           treeItem.iconPath = new vscode.ThemeIcon("vm");
+          treeItem.contextValue = "element";
           break;
         case "EachBlock":
           treeItem.label = "Each";
