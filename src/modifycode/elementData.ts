@@ -1,5 +1,7 @@
 import { QuickPickItem, QuickPickItemKind as K } from "vscode";
 
+export const emptyTags = ["area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "param", "source", "track", "wbr"];
+
 export const globalTags: QuickPickItem[] = [
   { label: "Common", kind: K.Separator },
   { label: "div", description: "Section" },
@@ -19,7 +21,7 @@ export const globalTags: QuickPickItem[] = [
   { label: "video", description: "Video" },
   { label: "canvas", description: "Raster graphics" },
   { label: "svg", description: "SVG graphics" },
-  { label: "figure", description: "Specifies self-contained content" },
+  { label: "figure", description: "Self-contained content" },
 
   { label: "Formatting", kind: K.Separator },
   { label: "h1", description: "Headings 1" },

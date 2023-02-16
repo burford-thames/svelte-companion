@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import { TreeItem } from "../../types/LayoutTreeTypes";
 import { getEditorSpacing, getElementSpacing, getInnerHtmlEndingPosition } from "../../utils/GettingPositionUtil";
-import { globalTags, specificTags } from "../data";
+import { emptyTags, globalTags, specificTags } from "../elementData";
 
 export default function addElementAsLastChild(item: TreeItem) {
   const insertPosition = getInnerHtmlEndingPosition(item);
@@ -33,7 +33,12 @@ export default function addElementAsLastChild(item: TreeItem) {
 
 function createCodeSnippet(item: TreeItem, selectedElement: string, insertPosition: vscode.Position): string {
   let element: string;
-  element = `<${selectedElement}></${selectedElement}>`;
+  // If selected element is an empty tag, don't add closing tag
+  if (emptyTags.includes(selectedElement)) {
+    element = `<${selectedElement}/>`;
+  } else {
+    element = `<${selectedElement}></${selectedElement}>`;
+  }
 
   const elementSpacing = getElementSpacing(item);
   const editorSpacing = getEditorSpacing();

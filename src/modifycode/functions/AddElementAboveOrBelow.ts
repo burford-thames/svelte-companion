@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import { TreeItem } from "../../types/LayoutTreeTypes";
 import { getElementSpacing } from "../../utils/GettingPositionUtil";
-import { globalTags, specificTags } from "../data";
+import { globalTags, specificTags, emptyTags } from "../elementData";
 
 export function addElementAbove(item: TreeItem) {
   addElementAboveOrBelow(item, "above");
@@ -52,8 +52,13 @@ function addElementAboveOrBelow(item: TreeItem, position: "above" | "below") {
 
 function createCodeSnippet(item: TreeItem, selectedElement: string, position: "above" | "below"): string {
   let element: string;
-  element = `<${selectedElement}></${selectedElement}>`;
-
+  // If selected element is an empty tag, don't add closing tag
+  if (emptyTags.includes(selectedElement)) {
+    element = `<${selectedElement}/>`;
+  } else {
+    element = `<${selectedElement}></${selectedElement}>`;
+  }
+  
   const elementSpacing = getElementSpacing(item);
   switch (position) {
     case "above":
