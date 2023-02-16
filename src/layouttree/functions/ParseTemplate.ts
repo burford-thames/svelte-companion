@@ -97,6 +97,7 @@ export default function parseTemplate(html: TemplateNode): TreeItem {
           treeItem.iconPath = new vscode.ThemeIcon("symbol-property");
           treeItem.isSecondary = true;
           treeItem.collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
+          treeItem.contextValue = "attribute";
           break;
         case "EventHandler":
           treeItem.label = (node as EventHandler).name;

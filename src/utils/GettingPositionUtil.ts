@@ -31,6 +31,17 @@ export function getInnerHtmlEndingPosition(item: TreeItem): vscode.Position {
   return innerHtmlEnd;
 }
 
+export function getLastAttributePosition(item: TreeItem): vscode.Position {
+  const document = vscode.window.activeTextEditor?.document;
+  const elementStartPosition = document?.positionAt(item.start || 0) || new vscode.Position(0, 0);
+  
+  const lastAttribute = item.children?.reverse().find((child) => child.contextValue === "attribute");
+  const lastAttributePosition = lastAttribute
+    ? document?.positionAt(lastAttribute.end || 0) || new vscode.Position(0, 0)
+    : elementStartPosition.translate(0, (item.label as string).length + 1);
+  return lastAttributePosition;
+}
+
 export function getElementSpacing(item: TreeItem): string {
   const document = vscode.window.activeTextEditor?.document;
   const elementStartPosition = document?.positionAt(item.start || 0) || new vscode.Position(0, 0);

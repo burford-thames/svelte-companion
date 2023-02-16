@@ -9,6 +9,7 @@ import { getProjectType } from "./utils/GetProjectTypeUtil";
 import openPreviewPanel from "./previewpanel/functions/OpenPreviewPanel";
 import { addElementAbove, addElementBelow } from "./modifycode/functions/AddElementAboveOrBelow";
 import { addElementToTemplate } from "./modifycode/functions/AddElementToTemplate";
+import { addAttribute } from "./modifycode/functions/AddAttribute";
 
 let previewCodeInjector: PreviewCodeInjector;
 
@@ -80,8 +81,8 @@ export function activate(context: vscode.ExtensionContext) {
     addElementToTemplate(item);
   });
 
-  let addElementPropertiesCommand = vscode.commands.registerCommand("svelte-companion.addElementProperties", (item: TreeItem) => {
-    vscode.window.showInformationMessage("Add element properties");
+  let addAttributeCommand = vscode.commands.registerCommand("svelte-companion.addAttribute", (item: TreeItem) => {
+    addAttribute(item);
   });
 
   let deleteElementCommand = vscode.commands.registerCommand("svelte-companion.deleteElement", (item: TreeItem) => {
@@ -108,7 +109,7 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(addElementAboveCommand);
   context.subscriptions.push(addElementBelowCommand);
   context.subscriptions.push(addElementToTemplateCommand);
-  context.subscriptions.push(addElementPropertiesCommand);
+  context.subscriptions.push(addAttributeCommand);
   context.subscriptions.push(deleteElementCommand);
   context.subscriptions.push(toggleSecondaryCommand);
   context.subscriptions.push(onDidChangeActiveTextEditor);

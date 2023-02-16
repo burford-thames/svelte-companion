@@ -19,9 +19,9 @@ export function addElementToTemplate(item: TreeItem) {
 
     // If selected element is an empty tag, don't add closing tag
     if (emptyTags.includes(selectedElement)) {
-      element = `<${selectedElement}/>`;
+      element = `\n<${selectedElement}/>`;
     } else {
-      element = `<${selectedElement}></${selectedElement}>`;
+      element = `\n<${selectedElement}></${selectedElement}>`;
     }
 
     // Insert element

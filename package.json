@@ -44,8 +44,8 @@
         "icon": "$(add)"
       },
       {
-        "command": "svelte-companion.addElementProperties",
-        "title": "Svelte companion: Add element's properties",
+        "command": "svelte-companion.addAttribute",
+        "title": "Add attribute",
         "icon": "$(tools)"
       },
       {
@@ -129,7 +129,7 @@
           "group": "inline"
         },
         {
-          "command": "svelte-companion.addElementProperties",
+          "command": "svelte-companion.addAttribute",
           "when": "view == svelteLayout && viewItem == element",
           "group": "inline"
         },
@@ -156,7 +156,7 @@
           "when": "false"
         },
         {
-          "command": "svelte-companion.addElementProperties",
+          "command": "svelte-companion.addAttribute",
           "when": "false"
         },
         {
