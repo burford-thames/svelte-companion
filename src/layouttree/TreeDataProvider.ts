@@ -3,6 +3,8 @@ import * as vscode from "vscode";
 import parseTemplate from "./functions/ParseTemplate";
 import { TreeItem } from "../types/LayoutTreeTypes";
 import parseScript from "./functions/ParseScript";
+import { sveltePreprocess } from "svelte-preprocess/dist/autoProcess";
+
 class TreeDataProvider implements vscode.TreeDataProvider<TreeItem> {
   private _onDidChangeTreeData: vscode.EventEmitter<TreeItem | undefined> = new vscode.EventEmitter<TreeItem | undefined>();
   readonly onDidChangeTreeData: vscode.Event<TreeItem | undefined> = this._onDidChangeTreeData.event;
@@ -12,7 +14,10 @@ class TreeDataProvider implements vscode.TreeDataProvider<TreeItem> {
   hideSecondaryNode: boolean = false;
 
   constructor() {
-    this.data = parseCurrentFile();
+    // this.data = parseCurrentFile();
+    parseCurrentFile().then((data) => {
+      this.data = data;
+    });
   }
 
   getTreeItem(element: TreeItem): vscode.TreeItem | Thenable<vscode.TreeItem> {
@@ -44,8 +49,11 @@ class TreeDataProvider implements vscode.TreeDataProvider<TreeItem> {
   }
 
   refresh(): void {
-    this.data = parseCurrentFile();
-    this._onDidChangeTreeData.fire(undefined);
+    // this.data = parseCurrentFile();
+    parseCurrentFile().then((data) => {
+      this.data = data;
+      this._onDidChangeTreeData.fire(undefined);
+    });
   }
 
   refreshElement(element: TreeItem): void {
@@ -53,7 +61,7 @@ class TreeDataProvider implements vscode.TreeDataProvider<TreeItem> {
   }
 }
 
-function parseCurrentFile(): TreeItem[] {
+async function parseCurrentFile(): Promise<TreeItem[]> {
   let data: TreeItem[] = [];
 
   // Get the active text editor
@@ -62,8 +70,20 @@ function parseCurrentFile(): TreeItem[] {
   const source = editor.document.getText();
 
   try {
+    const preprocessorGroup = sveltePreprocess({
+      sourceMap: false,
+      // defaults: {
+      //   script: "ts",
+      // },
+      // typescript: {
+      //   tsconfigFile: "./tsconfig.json",
+      // },
+    });
+
+    const { code } = await svelte.preprocess(source, preprocessorGroup, { filename: editor.document.fileName });
+
     // Parse the svelte file
-    const ast = svelte.parse(source, { filename: editor.document.fileName });
+    const ast = svelte.parse(code, { filename: editor.document.fileName });
     // if (ast.module) data.push(parseScript(ast.module));
     if (ast.instance) data.push(parseScript(ast.instance));
     data.push(parseTemplate(ast.html));
