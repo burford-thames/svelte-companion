@@ -3,8 +3,8 @@ import { TreeItem } from "../../types/LayoutTreeTypes";
 import { emptyTags, globalTags } from "../elementData";
 
 export function addElementToTemplate(item: TreeItem) {
-  const insertPosition = vscode.window.activeTextEditor?.document.positionAt(item.end ?? vscode.window.activeTextEditor?.document.getText().length ?? 0) ?? new vscode.Position(0, 0);
-
+  const document = vscode.window.activeTextEditor?.document;
+  const insertPosition = item.end ?? document?.positionAt(document.getText().length) ?? new vscode.Position(0, 0);
   // Create quick pick
   const quickPick = vscode.window.createQuickPick();
   quickPick.items = globalTags;

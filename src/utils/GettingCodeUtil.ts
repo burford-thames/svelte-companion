@@ -20,6 +20,6 @@ export function getCodeAtPositionFromNode(node: Node): string {
 export function getCodeAtPositionFromTreeItem(item: TreeItem): string {
   const editor = vscode.window.activeTextEditor;
   const document = editor?.document;
-  const text = document?.getText(new vscode.Range(document.positionAt(item.start || 0), document.positionAt(item.end || 0)));
+  const text = document?.getText(new vscode.Range(item.start!, item.end!));
   return text || "";
 }

@@ -20,7 +20,7 @@ export function addAttribute(item: TreeItem): void {
     let attribute: string;
 
     // If the element and the attribute are on the same line, add a space before the attribute
-    const itemPosition = vscode.window.activeTextEditor?.document.positionAt(item.start ?? 0) ?? new vscode.Position(0, 0);
+    const itemPosition = item.start ?? new vscode.Position(0, 0);
     if (itemPosition.line === insertPosition.line) {
       attribute = ` ${selectedAttribute}=""`;
     } else {

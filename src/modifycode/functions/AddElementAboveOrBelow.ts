@@ -15,10 +15,10 @@ function addElementAboveOrBelow(item: TreeItem, position: "above" | "below") {
   let insertPosition: vscode.Position;
   switch (position) {
     case "above":
-      insertPosition = vscode.window.activeTextEditor?.document.positionAt(item.start ?? 0) ?? new vscode.Position(0, 0);
+      insertPosition = item.start ?? new vscode.Position(0, 0);
       break;
     case "below":
-      insertPosition = vscode.window.activeTextEditor?.document.positionAt(item.end ?? 0) ?? new vscode.Position(0, 0);
+      insertPosition = item.end ?? new vscode.Position(0, 0);
       break;
   }
 

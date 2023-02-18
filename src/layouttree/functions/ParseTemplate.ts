@@ -7,6 +7,7 @@ import Binding from "svelte/types/compiler/compile/nodes/Binding";
 import Animation from "svelte/types/compiler/compile/nodes/Animation";
 import Transition from "svelte/types/compiler/compile/nodes/Transition";
 import { getCodeAtPositionFromNode } from "../../utils/GettingCodeUtil";
+import { getPositionFromAbsPosition } from "../../utils/GettingPositionUtil";
 
 // Parse the html code
 export default function parseTemplate(html: TemplateNode): TreeItem {
@@ -19,8 +20,8 @@ export default function parseTemplate(html: TemplateNode): TreeItem {
         label: node.type,
         isSecondary: false,
         children: [],
-        start: node.start,
-        end: node.end,
+        start: getPositionFromAbsPosition(node.start),
+        end: getPositionFromAbsPosition(node.end),
       };
 
       // Associate tree item with node
@@ -71,8 +72,8 @@ export default function parseTemplate(html: TemplateNode): TreeItem {
                 iconPath: new vscode.ThemeIcon("symbol-string"),
                 isSecondary: false,
                 collapsibleState: vscode.TreeItemCollapsibleState.None,
-                start: node.start! + position + 1,
-                end: node.start! + position + s.length,
+                start: getPositionFromAbsPosition(node.start! + position + 1),
+                end: getPositionFromAbsPosition(node.start! + position + s.length),
               };
             });
 

@@ -8,7 +8,7 @@ export default function deleteElement(item: TreeItem) {
   }
 
   // Get the selection of the tree item
-  const selectionOfElement = new vscode.Selection(editor.document.positionAt(item.start ?? 0), editor.document.positionAt(item.end ?? 0));
+  const selectionOfElement = new vscode.Selection(item.start!, item.end!);
   const endOfElement = editor.document.lineAt(selectionOfElement.end.line).range.end;
   let selectionToBeDeleted: vscode.Selection;
 

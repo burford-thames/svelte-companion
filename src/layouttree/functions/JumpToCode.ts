@@ -5,7 +5,7 @@ export default function jumpToCode(item: TreeItem) {
   // Get the column and line number of the destination
   const editor = vscode.window.activeTextEditor;
   const document = editor?.document;
-  const position = document?.positionAt(item.start || 0);
+  const position = item.start;
   
   // Jump to the destination
   editor?.revealRange(new vscode.Range(position!, position!));

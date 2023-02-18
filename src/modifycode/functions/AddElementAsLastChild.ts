@@ -43,7 +43,7 @@ function createCodeSnippet(item: TreeItem, selectedElement: string, insertPositi
   const elementSpacing = getElementSpacing(item);
   const editorSpacing = getEditorSpacing();
 
-  const itemPosition = vscode.window.activeTextEditor?.document.positionAt(item.start ?? 0) ?? new vscode.Position(0, 0);
+  const itemPosition = item.start ?? new vscode.Position(0, 0);
 
   if (itemPosition.line === insertPosition.line) {
     return `\n${elementSpacing + editorSpacing}${element}\n${elementSpacing}`;

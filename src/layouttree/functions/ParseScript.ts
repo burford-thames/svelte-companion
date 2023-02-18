@@ -2,6 +2,7 @@ import * as svelte from "svelte/compiler";
 import { Script } from "svelte/types/compiler/interfaces";
 import * as vscode from "vscode";
 import { Node, TreeItem } from "../../types/LayoutTreeTypes";
+import { getPositionFromAbsPosition } from "../../utils/GettingPositionUtil";
 
 export default function parseScript(script: Script): TreeItem {
   let root: TreeItem;
@@ -16,8 +17,8 @@ export default function parseScript(script: Script): TreeItem {
           isSecondary: false,
           iconPath: new vscode.ThemeIcon("symbol-variable"),
           collapsibleState: vscode.TreeItemCollapsibleState.None,
-          start: node.start,
-          end: node.end,
+          start: getPositionFromAbsPosition(node.start),
+          end: getPositionFromAbsPosition(node.end),
         });
       } else if (node.type === "FunctionDeclaration") {
         functions.push({
@@ -25,8 +26,8 @@ export default function parseScript(script: Script): TreeItem {
           iconPath: new vscode.ThemeIcon("symbol-function"),
           isSecondary: false,
           collapsibleState: vscode.TreeItemCollapsibleState.None,
-          start: node.start,
-          end: node.end,
+          start: getPositionFromAbsPosition(node.start),
+          end: getPositionFromAbsPosition(node.end),
         });
       }
     },
@@ -56,8 +57,8 @@ export default function parseScript(script: Script): TreeItem {
       },
     ],
     collapsibleState: vscode.TreeItemCollapsibleState.Expanded,
-    start: script.start,
-    end: script.end,
+    start: getPositionFromAbsPosition(script.start),
+    end: getPositionFromAbsPosition(script.end),
   };
 
   return root;

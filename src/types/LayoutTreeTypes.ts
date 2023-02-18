@@ -5,8 +5,8 @@ export type TreeItem = vscode.TreeItem & {
   children?: TreeItem[];
   parent?: TreeItem;
   isSecondary: boolean;
-  start?: number;
-  end?: number;
+  start?: vscode.Position;
+  end?: vscode.Position;
 };
 
 export type Node = BaseNode & {
