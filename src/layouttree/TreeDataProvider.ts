@@ -71,7 +71,7 @@ async function parseCurrentFile(): Promise<TreeItem[]> {
 
   try {
     const preprocessorGroup = sveltePreprocess({
-      sourceMap: false,
+      sourceMap: true,
       // defaults: {
       //   script: "ts",
       // },
@@ -80,7 +80,7 @@ async function parseCurrentFile(): Promise<TreeItem[]> {
       // },
     });
 
-    const { code } = await svelte.preprocess(source, preprocessorGroup, { filename: editor.document.fileName });
+    const { code, map } = await svelte.preprocess(source, preprocessorGroup, { filename: editor.document.fileName });
 
     // Parse the svelte file
     const ast = svelte.parse(code, { filename: editor.document.fileName });
