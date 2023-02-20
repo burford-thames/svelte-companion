@@ -27,6 +27,18 @@ function promptForValueAndInsertAttribute(selectedAttribute: string, item: TreeI
   const possibleValues = values.get(selectedAttribute);
   let attributeString: string;
 
+  if (!possibleValues) {
+    const inputBox = vscode.window.createInputBox();
+    inputBox.title = "Enter a value";
+    inputBox.show();
+    inputBox.onDidAccept(() => {
+      attributeString = `${selectedAttribute}="${inputBox.value}"`;
+      insertAttributeString(item, attributeString);
+      inputBox.hide();
+    });
+    return;
+  }
+
   switch (possibleValues?.type) {
     case "empty":
       attributeString = selectedAttribute;

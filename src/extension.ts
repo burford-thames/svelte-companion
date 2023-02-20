@@ -1,15 +1,13 @@
 import * as vscode from "vscode";
 import jumpToCode from "./layouttree/functions/JumpToCode";
 import TreeDataProvider from "./layouttree/TreeDataProvider";
-import { TreeItem } from "./types/LayoutTreeTypes";
-import addElementAsLastChild from "./modifycode/functions/AddElementAsLastChild";
-import deleteElement from "./modifycode/functions/DeleteElement";
-import PreviewCodeInjector from "./previewpanel/PreviewCodeInjector";
-import { getProjectType } from "./utils/GetProjectTypeUtil";
-import openPreviewPanel from "./previewpanel/functions/OpenPreviewPanel";
-import { addElementAbove, addElementBelow } from "./modifycode/functions/AddElementAboveOrBelow";
-import { addElementToTemplate } from "./modifycode/functions/AddElementToTemplate";
 import { addAttribute } from "./modifycode/functions/AddAttribute";
+import addElement from "./modifycode/functions/AddElement";
+import deleteElement from "./modifycode/functions/DeleteElement";
+import openPreviewPanel from "./previewpanel/functions/OpenPreviewPanel";
+import PreviewCodeInjector from "./previewpanel/PreviewCodeInjector";
+import { TreeItem } from "./types/LayoutTreeTypes";
+import { getProjectType } from "./utils/GetProjectTypeUtil";
 
 let previewCodeInjector: PreviewCodeInjector;
 
@@ -18,7 +16,7 @@ export function activate(context: vscode.ExtensionContext) {
   if (!workspace) {
     return;
   }
-  
+
   const projectType = getProjectType();
   if (projectType === undefined) {
     return;
@@ -66,19 +64,19 @@ export function activate(context: vscode.ExtensionContext) {
 
   //#region Modify code
   let addElementCommand = vscode.commands.registerCommand("svelte-companion.addElement", (item: TreeItem) => {
-    addElementAsLastChild(item);
+    addElement(item, "last-child");
   });
 
   let addElementAboveCommand = vscode.commands.registerCommand("svelte-companion.addElementAbove", (item: TreeItem) => {
-    addElementAbove(item);
+    addElement(item, "above");
   });
 
   let addElementBelowCommand = vscode.commands.registerCommand("svelte-companion.addElementBelow", (item: TreeItem) => {
-    addElementBelow(item);
+    addElement(item, "below");
   });
 
   let addElementToTemplateCommand = vscode.commands.registerCommand("svelte-companion.addElementToTemplate", (item: TreeItem) => {
-    addElementToTemplate(item);
+    addElement(item, "template");
   });
 
   let addAttributeCommand = vscode.commands.registerCommand("svelte-companion.addAttribute", (item: TreeItem) => {
@@ -117,7 +115,6 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(openPreviewCommand);
   context.subscriptions.push(injectPreviewCodeCommand);
   context.subscriptions.push(disposePreviewCodeCommand);
-
 }
 
 // This method is called when your extension is deactivated
