@@ -18,7 +18,11 @@ export default function deleteElement(item: TreeItem) {
     const startOfElementLine = editor.document.lineAt(selectionOfElement.start.line).range.start;
     const startOfAfterElementLine = editor.document.lineAt(selectionOfElement.end.line).range.start.translate(1, 0);
     selectionToBeDeleted = new vscode.Selection(startOfElementLine, startOfAfterElementLine);
-  } else {
+  } else if (item.contextValue === "text") {
+    // Delete the selection
+    selectionToBeDeleted = selectionOfElement;
+  } 
+  else {
     // Delete the selection and the previous whitespace
     selectionToBeDeleted = new vscode.Selection(selectionOfElement.start.translate(0, -1), selectionOfElement.end);
   }

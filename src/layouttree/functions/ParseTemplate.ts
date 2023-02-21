@@ -55,6 +55,7 @@ export default function parseTemplate(html: TemplateNode): TreeItem {
         case "Text":
           treeItem.label = (node as Text).data.trim();
           treeItem.iconPath = new vscode.ThemeIcon("symbol-string");
+          treeItem.contextValue = "text";
           if (parent.type === "Attribute") {
             // If parent is an attribute, then parent's label is the value of the attributes
             parent.treeItem!.description = treeItem.label;
