@@ -42,10 +42,32 @@ export default function parseTemplate(html: TemplateNode): TreeItem {
         case "EachBlock":
           treeItem.label = "Each";
           treeItem.iconPath = new vscode.ThemeIcon("repo-sync");
+          treeItem.contextValue = "logic";
           break;
         case "IfBlock":
           treeItem.label = "If";
           treeItem.iconPath = new vscode.ThemeIcon("question");
+          treeItem.contextValue = "logic";
+          break;
+        case "ElseBlock":
+          treeItem.label = "Else";
+          treeItem.iconPath = new vscode.ThemeIcon("arrow-right");
+          treeItem.contextValue = "logic";
+          break;
+        case "AwaitBlock":
+          treeItem.label = "Await";
+          treeItem.iconPath = new vscode.ThemeIcon("watch");
+          treeItem.contextValue = "logic";
+          break;
+        case "ThenBlock":
+          treeItem.label = "Then";
+          treeItem.iconPath = new vscode.ThemeIcon("arrow-right");
+          treeItem.contextValue = "logic";
+          break;
+        case "CatchBlock":
+          treeItem.label = "Catch";
+          treeItem.iconPath = new vscode.ThemeIcon("arrow-right");
+          treeItem.contextValue = "logic";
           break;
         case "Element":
           treeItem.label = (node as Element).name;

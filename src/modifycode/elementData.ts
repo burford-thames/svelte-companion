@@ -1,21 +1,25 @@
-import { QuickPickItem, QuickPickItemKind as K } from "vscode";
+import { QuickPickItemKind as K } from "vscode";
+import { ElementItem } from "../types/ElementTypes";
 
-export const emptyTags = ["area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "param", "source", "track", "wbr"];
+export const globalTags: ElementItem[] = [
+  { label: "Svelte", kind: K.Separator },
+  { label: "If", description: "Svelte if tag", type: "raw", raw: "{#if true}{/if}" },
+  { label: "Each", description: "Svelte each tag", type: "raw", raw: "{#each [] as item}{/each}" },
+  { label: "Await", description: "Svelte await tag", type: "raw", raw: "{#await promise}{/await}" },
 
-export const globalTags: QuickPickItem[] = [
   { label: "Common", kind: K.Separator },
   { label: "div", description: "Section" },
   { label: "span", description: "Section" },
   { label: "p", description: "Paragraph" },
   { label: "a", description: "Hyperlink" },
   { label: "button", description: "Button" },
-  { label: "br", description: "Single line break" },
-  { label: "hr", description: "Horizontal rule" },
+  { label: "br", description: "Single line break", type: "empty" },
+  { label: "hr", description: "Horizontal rule", type: "empty" },
   { label: "i", description: "Icon" },
   { label: "table", description: "Table" },
 
   { label: "Media / Graphics", kind: K.Separator },
-  { label: "img", description: "Image" },
+  { label: "img", description: "Image", type: "empty" },
   { label: "picture", description: "Container for multiple images" },
   { label: "audio", description: "Sound" },
   { label: "video", description: "Video" },
@@ -40,7 +44,7 @@ export const globalTags: QuickPickItem[] = [
 
   { label: "Form", kind: K.Separator },
   { label: "form", description: "HTML form for user input" },
-  { label: "input", description: "Various input controls" },
+  { label: "input", description: "Various input controls", type: "empty" },
   { label: "label", description: "Label for an input control" },
   { label: "textarea", description: "Multiline input control" },
   { label: "select", description: "Drop-down list" },
@@ -58,12 +62,12 @@ export const globalTags: QuickPickItem[] = [
 
   { label: "Misc.", kind: K.Separator },
   { label: "iframe", description: "An inline frame" },
-  { label: "embed", description: "A container for an external (non-HTML) application" },
+  { label: "embed", description: "A container for an external (non-HTML) application", type: "empty" },
   { label: "progress", description: "Represents the progress of a task" },
   { label: "pre", description: "Preformatted text" },
 ];
 
-export const specificTags = new Map<string, QuickPickItem[]>([
+export const specificTags = new Map<string, ElementItem[]>([
   [
     "table",
     [
@@ -85,7 +89,7 @@ export const specificTags = new Map<string, QuickPickItem[]>([
   ["thead", [{ label: "tr", description: "Row in a table" }]],
   ["tbody", [{ label: "tr", description: "Row in a table" }]],
   ["tfoot", [{ label: "tr", description: "Row in a table" }]],
-  ["colgroup", [{ label: "col", description: "Column properties for each column within a colgroup element" }]],
+  ["colgroup", [{ label: "col", description: "Column properties for each column within a colgroup element", type: "empty" }]],
   [
     "select",
     [
@@ -107,11 +111,18 @@ export const specificTags = new Map<string, QuickPickItem[]>([
   [
     "picture",
     [
-      { label: "source", description: "Defines multiple media resources" },
-      { label: "img", description: "Image" },
+      { label: "source", description: "Defines multiple media resources", type: "empty" },
+      { label: "img", description: "Image", type: "empty" },
     ],
   ],
   ["figure", [{ label: "figcaption", description: "A caption for a figure element" }]],
-  ["video", [{ label: "source", description: "Defines multiple media resources" }]],
-  ["audio", [{ label: "source", description: "Defines multiple media resources" }]],
+  ["video", [{ label: "source", description: "Defines multiple media resources", type: "empty" }]],
+  ["audio", [{ label: "source", description: "Defines multiple media resources", type: "empty" }]],
+  [
+    "If",
+    [
+      { label: "Else", description: "Else condition", type: "raw", raw: "\n{:else}\n" },
+      { label: "Else If", description: "Else if condition", type: "raw", raw: "\n{:else if true}\n" },
+    ],
+  ],
 ]);
