@@ -1,8 +1,8 @@
 import * as vscode from "vscode";
-import { ElementInsertPosition } from "../../types/ElementTypes";
+import { ElementInsertPosition, ElementItem, ElementType } from "../../types/ElementTypes";
 import { TreeItem } from "../../types/LayoutTreeTypes";
 import { getInnerHtmlEndingPosition, getElementSpacing, getEditorSpacing } from "../../utils/GettingPositionUtil";
-import { specificTags, globalTags, emptyTags } from "../elementData";
+import { specificTags, globalTags } from "../elementData";
 
 export default function addElement(item: TreeItem, position: ElementInsertPosition): void {
   const document = vscode.window.activeTextEditor?.document;
@@ -27,7 +27,8 @@ export default function addElement(item: TreeItem, position: ElementInsertPositi
   quickPick.title = "Select an element";
 
   const specificChildElementsForThisElement = specificTags.get(item.label as string) ?? [];
-  quickPick.items = [...specificChildElementsForThisElement, ...globalTags];
+  const availableTags = [...specificChildElementsForThisElement, ...globalTags];
+  quickPick.items = availableTags;
 
   // Show quick pick
   quickPick.show();
@@ -35,7 +36,11 @@ export default function addElement(item: TreeItem, position: ElementInsertPositi
   // On selection
   quickPick.onDidChangeSelection((selection) => {
     const selectedElement = selection[0].label;
-    const element = createCodeSnippet(item, selectedElement, insertPosition, position);
+
+    // Find element item from element data
+    const selectedItem = availableTags.find((item) => item.label === selectedElement);
+
+    const element = createCodeSnippet(item, selectedItem!, insertPosition, position);
 
     // Insert element
     vscode.window.activeTextEditor?.edit((editBuilder) => {
@@ -48,13 +53,22 @@ export default function addElement(item: TreeItem, position: ElementInsertPositi
   });
 }
 
-function createCodeSnippet(item: TreeItem, selectedElement: string, insertPosition: vscode.Position, relativePosition: ElementInsertPosition): string {
+function createCodeSnippet(item: TreeItem, selectedItem: ElementItem, insertPosition: vscode.Position, relativePosition: ElementInsertPosition): string {
   let element: string;
   // If selected element is an empty tag, don't add closing tag
-  if (emptyTags.includes(selectedElement)) {
-    element = `<${selectedElement}/>`;
-  } else {
-    element = `<${selectedElement}></${selectedElement}>`;
+  switch (selectedItem.type) {
+    case "empty":
+      element = `<${selectedItem.label}/>`;
+      break;
+    case "normal":
+      element = `<${selectedItem.label}></${selectedItem.label}>`;
+      break;
+    case "raw":
+      element = selectedItem.raw ?? "";
+      break;
+    default:
+      element = `<${selectedItem.label}></${selectedItem.label}>`;
+      break;
   }
 
   const elementSpacing = getElementSpacing(item);
