@@ -122,11 +122,11 @@
         },
         {
           "command": "svelte-companion.addElementAbove",
-          "when": "view == svelteLayout && viewItem == element"
+          "when": "viewItem == element || viewItem == logic"
         },
         {
           "command": "svelte-companion.addElementBelow",
-          "when": "view == svelteLayout && viewItem == element"
+          "when": "viewItem == element || viewItem == logic"
         },
         {
           "command": "svelte-companion.addElementToTemplate",

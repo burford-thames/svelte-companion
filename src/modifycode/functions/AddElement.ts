@@ -6,27 +6,32 @@ import { specificTags, globalTags } from "../elementData";
 
 export default function addElement(item: TreeItem, position: ElementInsertPosition): void {
   const document = vscode.window.activeTextEditor?.document;
-  let insertPosition: vscode.Position;
-  switch (position) {
-    case "last-child":
-      insertPosition = getInnerHtmlEndingPosition(item);
-      break;
-    case "above":
-      insertPosition = item.start ?? new vscode.Position(0, 0);
-      break;
-    case "below":
-      insertPosition = item.end ?? new vscode.Position(0, 0);
-      break;
-    case "template":
-      insertPosition = item.end ?? document?.positionAt(document.getText().length) ?? new vscode.Position(0, 0);
-      break;
-  }
 
   // Create quick pick
   const quickPick = vscode.window.createQuickPick();
   quickPick.title = "Select an element";
 
-  const specificChildElementsForThisElement = specificTags.get(item.label as string) ?? [];
+  let specificChildElementsForThisElement: ElementItem[];
+  let insertPosition: vscode.Position;
+  switch (position) {
+    case "last-child":
+      insertPosition = getInnerHtmlEndingPosition(item);
+      specificChildElementsForThisElement = specificTags.get(item.label as string) ?? [];
+      break;
+    case "above":
+      insertPosition = item.start ?? new vscode.Position(0, 0);
+      specificChildElementsForThisElement = specificTags.get(item.parent?.label as string) ?? [];
+      break;
+    case "below":
+      insertPosition = item.end ?? new vscode.Position(0, 0);
+      specificChildElementsForThisElement = specificTags.get(item.parent?.label as string) ?? [];
+      break;
+    case "template":
+      insertPosition = item.end ?? document?.positionAt(document.getText().length) ?? new vscode.Position(0, 0);
+      specificChildElementsForThisElement = [];
+      break;
+  }
+
   const availableTags = [...specificChildElementsForThisElement, ...globalTags];
   quickPick.items = availableTags;
 

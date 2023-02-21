@@ -59,6 +59,11 @@ export default function parseTemplate(html: TemplateNode): TreeItem {
           treeItem.iconPath = new vscode.ThemeIcon("watch");
           treeItem.contextValue = "logic";
           break;
+        case "PendingBlock":
+          treeItem.label = "Pending";
+          treeItem.iconPath = new vscode.ThemeIcon("watch");
+          treeItem.contextValue = "logic";
+          break;
         case "ThenBlock":
           treeItem.label = "Then";
           treeItem.iconPath = new vscode.ThemeIcon("arrow-right");
@@ -124,7 +129,7 @@ export default function parseTemplate(html: TemplateNode): TreeItem {
           treeItem.contextValue = "attribute";
           break;
         case "EventHandler":
-          treeItem.label = (node as EventHandler).name;
+          treeItem.label = (node as EventHandler).name + " " + Array.from((node as EventHandler).modifiers).join(", ");
           treeItem.iconPath = new vscode.ThemeIcon("symbol-event");
           treeItem.contextValue = "event";
           treeItem.isSecondary = true;
@@ -156,7 +161,7 @@ export default function parseTemplate(html: TemplateNode): TreeItem {
           break;
 
         default:
-          treeItem.label = "";
+          treeItem.label = node.type;
           treeItem.iconPath = new vscode.ThemeIcon("folder");
           break;
       }

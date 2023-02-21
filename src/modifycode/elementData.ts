@@ -2,11 +2,6 @@ import { QuickPickItemKind as K } from "vscode";
 import { ElementItem } from "../types/ElementTypes";
 
 export const globalTags: ElementItem[] = [
-  { label: "Svelte", kind: K.Separator },
-  { label: "If", description: "Svelte if tag", type: "raw", raw: "{#if true}{/if}" },
-  { label: "Each", description: "Svelte each tag", type: "raw", raw: "{#each [] as item}{/each}" },
-  { label: "Await", description: "Svelte await tag", type: "raw", raw: "{#await promise}{/await}" },
-
   { label: "Common", kind: K.Separator },
   { label: "div", description: "Section" },
   { label: "span", description: "Section" },
@@ -17,6 +12,11 @@ export const globalTags: ElementItem[] = [
   { label: "hr", description: "Horizontal rule", type: "empty" },
   { label: "i", description: "Icon" },
   { label: "table", description: "Table" },
+
+  { label: "Logic", kind: K.Separator },
+  { label: "If", description: "Svelte if tag", type: "raw", raw: "{#if true}{/if}" },
+  { label: "Each", description: "Svelte each tag", type: "raw", raw: "{#each [] as item}{/each}" },
+  { label: "Await", description: "Svelte await tag", type: "raw", raw: "{#await promise}\n{:then number}\n{:catch error}\n{/await}" },
 
   { label: "Media / Graphics", kind: K.Separator },
   { label: "img", description: "Image", type: "empty" },
