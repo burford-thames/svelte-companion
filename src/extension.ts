@@ -3,6 +3,7 @@ import jumpToCode from "./layouttree/functions/JumpToCode";
 import TreeDataProvider from "./layouttree/TreeDataProvider";
 import { addAttribute } from "./modifycode/functions/AddAttribute";
 import addElement from "./modifycode/functions/AddElement";
+import { addEvent } from "./modifycode/functions/AddEvent";
 import deleteElement from "./modifycode/functions/DeleteElement";
 import openPreviewPanel from "./previewpanel/functions/OpenPreviewPanel";
 import PreviewCodeInjector from "./previewpanel/PreviewCodeInjector";
@@ -83,6 +84,10 @@ export function activate(context: vscode.ExtensionContext) {
     addAttribute(item);
   });
 
+  let addEventHandlerCommand = vscode.commands.registerCommand("svelte-companion.addEventHandler", (item: TreeItem) => {
+    addEvent(item);
+  });
+
   let deleteElementCommand = vscode.commands.registerCommand("svelte-companion.deleteElement", (item: TreeItem) => {
     deleteElement(item);
   });
@@ -108,6 +113,7 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(addElementBelowCommand);
   context.subscriptions.push(addElementToTemplateCommand);
   context.subscriptions.push(addAttributeCommand);
+  context.subscriptions.push(addEventHandlerCommand);
   context.subscriptions.push(deleteElementCommand);
   context.subscriptions.push(toggleSecondaryCommand);
   context.subscriptions.push(onDidChangeActiveTextEditor);

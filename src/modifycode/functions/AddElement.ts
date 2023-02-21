@@ -24,6 +24,7 @@ export default function addElement(item: TreeItem, position: ElementInsertPositi
 
   // Create quick pick
   const quickPick = vscode.window.createQuickPick();
+  quickPick.title = "Select an element";
 
   const specificChildElementsForThisElement = specificTags.get(item.label as string) ?? [];
   quickPick.items = [...specificChildElementsForThisElement, ...globalTags];

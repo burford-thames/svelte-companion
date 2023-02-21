@@ -27,7 +27,7 @@
       },
       {
         "command": "svelte-companion.addElement",
-        "title": "Svelte companion: Add element",
+        "title": "Add child element",
         "icon": "$(add)"
       },
       {
@@ -46,7 +46,12 @@
       {
         "command": "svelte-companion.addAttribute",
         "title": "Add attribute",
-        "icon": "$(tools)"
+        "icon": "$(symbol-property)"
+      },
+      {
+        "command": "svelte-companion.addEventHandler",
+        "title": "Add event handler",
+        "icon": "$(symbol-event)"
       },
       {
         "command": "svelte-companion.deleteElement",
@@ -113,7 +118,7 @@
         {
           "command": "svelte-companion.addElement",
           "when": "view == svelteLayout && viewItem == element",
-          "group": "inline"
+          "group": "inline@3"
         },
         {
           "command": "svelte-companion.addElementAbove",
@@ -131,7 +136,12 @@
         {
           "command": "svelte-companion.addAttribute",
           "when": "view == svelteLayout && viewItem == element",
-          "group": "inline"
+          "group": "inline@1"
+        },
+        {
+          "command": "svelte-companion.addEventHandler",
+          "when": "view == svelteLayout && viewItem == element",
+          "group": "inline@2"
         },
         {
           "command": "svelte-companion.deleteElement",
@@ -157,6 +167,10 @@
         },
         {
           "command": "svelte-companion.addAttribute",
+          "when": "false"
+        },
+        {
+          "command": "svelte-companion.addEventHandler",
           "when": "false"
         },
         {
