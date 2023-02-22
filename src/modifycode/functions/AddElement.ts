@@ -1,33 +1,26 @@
 import * as vscode from "vscode";
-import { ElementInsertPosition, ElementItem, ElementType } from "../../types/ElementTypes";
+import { ElementInsertPosition, ElementItem } from "../../types/ElementTypes";
 import { TreeItem } from "../../types/LayoutTreeTypes";
-import { getInnerHtmlEndingPosition, getElementSpacing, getEditorSpacing } from "../../utils/GettingPositionUtil";
-import { specificTags, globalTags } from "../elementData";
+import { getEditorSpacing, getElementSpacing, getInnerHtmlEndingPosition } from "../../utils/GettingPositionUtil";
+import { globalTags, specificTags } from "../elementData";
 
 export default function addElement(item: TreeItem, position: ElementInsertPosition): void {
-  const document = vscode.window.activeTextEditor?.document;
-
   // Create quick pick
   const quickPick = vscode.window.createQuickPick();
   quickPick.title = "Select an element";
 
   let specificChildElementsForThisElement: ElementItem[];
-  let insertPosition: vscode.Position;
   switch (position) {
     case "last-child":
-      insertPosition = getInnerHtmlEndingPosition(item);
       specificChildElementsForThisElement = specificTags.get(item.label as string) ?? [];
       break;
     case "above":
-      insertPosition = item.start ?? new vscode.Position(0, 0);
       specificChildElementsForThisElement = specificTags.get(item.parent?.label as string) ?? [];
       break;
     case "below":
-      insertPosition = item.end ?? new vscode.Position(0, 0);
       specificChildElementsForThisElement = specificTags.get(item.parent?.label as string) ?? [];
       break;
     case "template":
-      insertPosition = item.end ?? document?.positionAt(document.getText().length) ?? new vscode.Position(0, 0);
       specificChildElementsForThisElement = [];
       break;
   }
@@ -45,20 +38,14 @@ export default function addElement(item: TreeItem, position: ElementInsertPositi
     // Find element item from element data
     const selectedItem = availableTags.find((item) => item.label === selectedElement);
 
-    const element = createCodeSnippet(item, selectedItem!, insertPosition, position);
-
-    // Insert element
-    vscode.window.activeTextEditor?.edit((editBuilder) => {
-      editBuilder.insert(insertPosition, element);
-    });
-    vscode.window.activeTextEditor?.document.save();
+    createCodeSnippetAndInsert(item, selectedItem!, position);
 
     // Hide quick pick
     quickPick.hide();
   });
 }
 
-function createCodeSnippet(item: TreeItem, selectedItem: ElementItem, insertPosition: vscode.Position, relativePosition: ElementInsertPosition): string {
+function createCodeSnippetAndInsert(item: TreeItem, selectedItem: ElementItem, relativePosition: ElementInsertPosition): void {
   let element: string;
   // If selected element is an empty tag, don't add closing tag
   switch (selectedItem.type) {
@@ -71,27 +58,59 @@ function createCodeSnippet(item: TreeItem, selectedItem: ElementItem, insertPosi
     case "raw":
       element = selectedItem.raw ?? "";
       break;
+    case "input":
+      // Open input box
+      vscode.window.showInputBox({ prompt: "Enter input value" }).then((value) => {
+        if (value) {
+          element = value;
+          padAndInsert(item, element, relativePosition);
+        }
+      });
+      return;
     default:
       element = `<${selectedItem.label}></${selectedItem.label}>`;
       break;
   }
+
+  padAndInsert(item, element, relativePosition);
+}
+
+function padAndInsert(item: TreeItem, element: string, relativePosition: ElementInsertPosition): void {
+  const document = vscode.window.activeTextEditor?.document;
+  let insertPosition: vscode.Position;
 
   const elementSpacing = getElementSpacing(item);
   const editorSpacing = getEditorSpacing();
 
   const itemPosition = item.start ?? new vscode.Position(0, 0);
 
+  let paddedElement: string;
   switch (relativePosition) {
     case "last-child":
+      insertPosition = getInnerHtmlEndingPosition(item);
       if (itemPosition.line === insertPosition.line) {
-        return `\n${elementSpacing + editorSpacing}${element}\n${elementSpacing}`;
+        paddedElement = `\n${elementSpacing + editorSpacing}${element}\n${elementSpacing}`;
+      } else {
+        paddedElement = `\n${elementSpacing + editorSpacing}${element}`;
       }
-      return `\n${elementSpacing + editorSpacing}${element}`;
+      break;
     case "above":
-      return `${element}\n${elementSpacing}`;
+      insertPosition = item.start ?? new vscode.Position(0, 0);
+      paddedElement = `${element}\n${elementSpacing}`;
+      break;
     case "below":
-      return `\n${elementSpacing}${element}`;
+      insertPosition = item.end ?? new vscode.Position(0, 0);
+      paddedElement = `\n${elementSpacing}${element}`;
+      break;
     case "template":
-      return `\n${element}`;
+      insertPosition = item.end ?? document?.positionAt(document.getText().length) ?? new vscode.Position(0, 0);
+      paddedElement = `\n${element}`;
+      break;
   }
+
+  // Insert element
+  vscode.window.activeTextEditor?.edit((editBuilder) => {
+    editBuilder.insert(insertPosition, paddedElement);
+  });
+  vscode.window.activeTextEditor?.document.save();
 }

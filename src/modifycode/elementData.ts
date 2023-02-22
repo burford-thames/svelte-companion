@@ -3,6 +3,7 @@ import { ElementItem } from "../types/ElementTypes";
 
 export const globalTags: ElementItem[] = [
   { label: "Common", kind: K.Separator },
+  { label: "Text", description: "Text", type: "input" },
   { label: "div", description: "Section" },
   { label: "span", description: "Section" },
   { label: "p", description: "Paragraph" },
