@@ -9,6 +9,11 @@
   "categories": [
     "Other"
   ],
+  "publisher": "BurfordThames",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/burford-thames/svelte-companion.git"
+  },
   "activationEvents": [
     "onStartupFinished"
   ],
@@ -185,7 +190,11 @@
     }
   },
   "scripts": {
-    "vscode:prepublish": "npm run compile",
+    "vscode:prepublish": "npm run esbuild-base -- --minify",
+    "esbuild-base": "esbuild ./src/extension.ts --bundle --outfile=out/main.js --external:vscode --format=cjs --platform=node",
+    "esbuild": "npm run esbuild-base -- --sourcemap",
+    "esbuild-watch": "npm run esbuild-base -- --sourcemap --watch",
+    "test-compile": "tsc -p ./",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile && npm run lint",
@@ -201,6 +210,7 @@
     "@typescript-eslint/eslint-plugin": "^5.45.0",
     "@typescript-eslint/parser": "^5.45.0",
     "@vscode/test-electron": "^2.2.0",
+    "esbuild": "^0.17.10",
     "eslint": "^8.28.0",
     "estree-walker": "^3.0.2",
     "glob": "^8.0.3",
